@@ -1,0 +1,25 @@
+# Autoencoder config for MELO-GAN
+MAX_NOTES: 512
+LATENT_DIM: 128
+BATCH_SIZE: 32
+LR: 1e-4
+EPOCHS: 60
+WEIGHT_DECAY: 1e-5
+EARLY_STOP_PATIENCE: 10
+
+# augmentation settings
+AUGMENT:
+  tempo_jitter: 0.07 # ±7% tempo scaling
+  pitch_shift: 1 # ±1 semitone
+  note_dropout: 0.03 # drop ~3% notes
+  velocity_jitter: 8.0 # velocity jitter (std dev)
+  timing_jitter: 0.02 # timing jitter in seconds (σ)
+
+# directories
+PROCESSED_DIR: data/processed
+SPLITS_DIR: data/splits
+CHECKPOINT_DIR: data/models/ae
+LOG_DIR: experiments/ae
+RECON_DIR: experiments/ae/reconstructions
+RECON_FREQ: 1
+RECON_SAVE_COUNT: 6
