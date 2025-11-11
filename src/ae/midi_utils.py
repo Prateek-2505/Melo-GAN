@@ -1,7 +1,7 @@
 # src/ae/midi_utils.py
 import os
 import numpy as np
-from ..utils.path_utils import ensure_dir # Import from your new utils file
+from .path_utils import ensure_dir # Import from your new utils file
 
 try:
     import pretty_midi

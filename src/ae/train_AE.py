@@ -25,11 +25,11 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
 # --- Local Imports ---
-from ..utils.path_utils import load_config, ensure_dir
+from .path_utils import load_config, ensure_dir
 from .dataset import MIDIDataset
 from .model import Autoencoder
 from .midi_utils import save_recon_midi
-from ..utils.resolve_splits import resolve
+from .resolve_splits import resolve
 # -------------- Training loop -----------------------
 
 def train(cfg):
