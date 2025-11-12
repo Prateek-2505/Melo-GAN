@@ -1,4 +1,92 @@
-.venv
-.vscode
-.env
-data/raw
+# ======================================
+# 🧠 PROJECT: MELO-GAN
+# Purpose: Safe ignores for heavy assets,
+# checkpoints, and generated data.
+# Keeps team sync clean and functional.
+# ======================================
+
+# --- Core ---
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.so
+*.log
+
+# --- Virtual Environments ---
+.venv/
+env/
+venv/
+*.env
+
+# --- IDE / Editor / OS junk ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Data-heavy directories ---
+# Raw and processed MIDI/NPZ data (too big for git)
+data/raw/
+data/processed/
+
+# --- Model outputs & checkpoints ---
+# Keep only directory structure, not large .pth files
+data/models/**/*.pth
+!data/models/ae/
+!data/models/gan/
+!data/models/ae/ae_best.pth
+!data/models/ae/encoder_final.pth
+!data/models/gan/gan_final.pth
+data/models/**/other/
+
+# --- Feature Scaler ---
+# data/models/scaler.joblib
+
+# --- Training Experiments ---
+data/experiments/
+# Keep experiment configs or scripts if needed
+!data/experiments/**/*.yaml
+!data/experiments/**/*.py
+
+# --- Temporary / generated analysis files ---
+*.csv
+*.npz
+*.npy
+*.pkl
+# *.joblib
+*.tar.gz
+*.zip
+
+# --- Docs / reports ---
+# Allow human docs and configs, but skip auto-generated plots
+data/docs/*.png
+!data/docs/*.csv
+!data/docs/*.yaml
+!data/docs/*.txt
+
+# --- Config files (keep these!) ---
+!config/ae_config.yaml
+!config/gan_config.yaml
+
+# --- Checkpoints / logs / run artifacts ---
+runs/
+checkpoints/
+wandb/
+tensorboard/
+*.ckpt
+
+# --- Compressed backups ---
+*.gz
+*.7z
+*.bz2
+*.xz
+
+# --- Temporary test scripts ---
+test_*.py
+debug_*.py
+tmp_*.py
+checkpoint_ver1.txt
+
+# ae reconstructions which are not required 
+experiments/ae/reconstructions

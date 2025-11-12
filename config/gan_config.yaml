@@ -1,0 +1,48 @@
+# GAN config for MELO-GAN (integration with AE)
+INTEGRATION_MODE: "conditioning"   # "conditioning" or "warm_start"
+# conditioning mode when we are using the AE’s latent vectors to GAN during training
+# warm_start mode when we are directly init the GAN weights from the AE, this may also induce noise in the GAN
+
+
+# Data
+SPLITS_DIR: "data/splits"
+TRAIN_SPLIT: "data/splits/train_split.csv"
+VAL_SPLIT: "data/splits/val_split.csv"
+PROCESSED_DIR: "data/processed"
+ENCODER_FEATS_TRAIN: "data/splits/train/encoder_feats.npy"
+ENCODER_FEATS_VAL: "data/splits/val/encoder_feats.npy"
+CHECKPOINT_DIR: "data/models/gan"
+LOG_DIR: "data/experiments/gan"
+SAMPLE_DIR: "data/experiments/gan/samples"
+
+# Model sizes
+NOISE_DIM: 128
+LATENT_DIM: 128   # must match AE latent dim
+GEN_HIDDEN: 512
+BATCH_SIZE: 32
+MAX_NOTES: 512
+NOTE_DIM: 4
+
+# Training
+EPOCHS: 200
+LR_G: 2e-4
+LR_D: 2e-4
+BETAS: [0.5, 0.999]
+BETA1: 0.5
+WEIGHT_DECAY: 1e-6
+
+# Loss weights
+LAMBDA_EMOTION: 1.0    # weight for the emotion loss on generator
+LAMBDA_RECON: 0.0      # optional reconstruction loss weight (if using AE decoder)
+
+# Checkpoints / logs
+CHECKPOINT_DIR: "data/models/gan"
+LOG_DIR: "data/experiments/gan"
+AE_FULL_CKPT: "models/ae/ae_epoch_best.pth"   # optional full AE checkpoint (for warm_start)
+AE_ENCODER_PTH: "models/ae/encoder_final.pth" # encoder-only path (useful for conditioning)
+SAVE_FREQ: 5
+SAMPLE_DIR: "experiments/gan/samples"
+
+# Misc
+DEVICE: "cuda"
+SEED: 42
