@@ -1,0 +1,58 @@
+augment: false
+augment_cfg:
+  dropout_prob: 0.0
+  noise_std: 0.0
+  pitch_shift_prob: 0.0
+batch_size: 64
+checkpoint_dir: data/models/ed
+device: cuda
+dropout: 0.2
+early_stopping_patience: 10
+encoder_feats_path: data/splits/train/encoder_feats.npy
+input_mode: latent
+labels:
+  - happy
+  - sad
+  - angry
+  - calm
+latent_dim: 128
+log_dir: data/experiments/ed
+manifest_csv: data/docs/data_manifest.csv
+max_notes: 512
+metric_for_best: val_loss
+mlp_hidden:
+  - 256
+  - 128
+n_classes: 4
+name: emotion_discriminator_v1
+note_dim: 4
+notes_blocks: 4
+notes_hidden: 256
+num_epochs: 50
+optimizer:
+  betas:
+    - 0.5
+    - 0.999
+  lr: 2e-4
+  name: AdamW
+  weight_decay: 0.0
+preload: false
+processed_dir: data/processed
+save_freq: 5
+save_name: ed_best.pth
+scheduler:
+  factor: 0.5
+  mode: min
+  name: ReduceLROnPlateau
+  patience: 5
+  threshold: 0.0001
+seed: 42
+test_encoder_feats_path: data/splits/test/encoder_feats.npy
+test_split_csv: data/splits/test_split.csv
+train_encoder_feats_path: data/splits/train/encoder_feats.npy
+train_split_csv: data/splits/train_split.csv
+use_spectral_norm: false
+val_encoder_feats_path: data/splits/val/encoder_feats.npy
+val_split_csv: data/splits/val_split.csv
+
+use_weighted_sampler: true   # or false

@@ -90,3 +90,9 @@ checkpoint_ver1.txt
 
 # ae reconstructions which are not required 
 experiments/ae/reconstructions
+
+Melo Gan Phase1a Checkpoint.pdf
+cam_test.py
+
+tree.txt
+haarcascade_frontalface_default.xml
