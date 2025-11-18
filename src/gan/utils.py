@@ -1,6 +1,6 @@
 """
 Utilities for GAN training and inference.
-Includes: Seeding, Weights Init, WGAN-GP Loss, and MIDI Post-Processing.
+Includes: Training Utils, WGAN Loss, Advanced Music Theory (Scales), and Instrument Support.
 """
 
 import torch
@@ -8,7 +8,24 @@ import torch.autograd as autograd
 import random
 import numpy as np
 import os
-import pretty_midi # Requires: pip install pretty_midi
+import pretty_midi
+
+# --- 1. MUSICAL SCALE DEFINITIONS ---
+SCALES = {
+    'major': [0, 2, 4, 5, 7, 9, 11],
+    'minor': [0, 2, 3, 5, 7, 8, 10],
+    'chromatic': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    'dorian': [0, 2, 3, 5, 7, 9, 10],
+    'phrygian': [0, 1, 3, 5, 7, 8, 10],
+    'lydian': [0, 2, 4, 6, 7, 9, 11],
+    'mixolydian': [0, 2, 4, 5, 7, 9, 10],
+    'locrian': [0, 1, 3, 5, 6, 8, 10],
+    'major_pentatonic': [0, 2, 4, 7, 9],
+    'minor_pentatonic': [0, 3, 5, 7, 10],
+    'blues': [0, 3, 5, 6, 7, 10],
+}
+
+NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
 def seed_everything(seed=42):
     random.seed(seed)
@@ -55,25 +72,11 @@ def emotion_to_index(emotion):
     try: return int(emotion)
     except: return -1
 
-# --- THIS IS THE CORRECTED FUNCTION ---
 def compute_gradient_penalty(D, real_samples, fake_samples, numeric_embedding, device):
-    """
-    Calculates the gradient penalty loss for WGAN GP.
-    'D' is the Discriminator (Critic).
-    """
-    # Random weight term for interpolation
     alpha = torch.rand(real_samples.size(0), 1, 1, device=device)
     alpha = alpha.expand_as(real_samples)
-
-    # Get random interpolation between real and fake samples
     interpolates = (alpha * real_samples + (1 - alpha) * fake_samples).requires_grad_(True)
-
-    # Get Discriminator score for interpolated samples
-    # --- FIX IS HERE ---
-    # The Discriminator (D) now only returns one value (the score).
     d_interpolates = D(interpolates, numeric_embedding)
-
-    # Get gradient w.r.t. the interpolated samples
     gradients = autograd.grad(
         outputs=d_interpolates,
         inputs=interpolates,
@@ -82,109 +85,77 @@ def compute_gradient_penalty(D, real_samples, fake_samples, numeric_embedding, d
         retain_graph=True,
         only_inputs=True,
     )[0]
-
-    # Flatten gradients
-    # Use .reshape() instead of .view() to handle non-contiguous tensors
     gradients = gradients.reshape(gradients.size(0), -1)
-
-    # Calculate penalty: (||grad||_2 - 1)^2
     gradient_penalty = ((gradients.norm(2, dim=1) - 1) ** 2).mean()
     return gradient_penalty
 
-# ... (all other functions in utils.py like seed_everything, etc.)
-
-# ... (all other functions in utils.py)
-
-# --- NEW: Post-Processing (MIDI Generation) ---
-# ... (in src/gan/utils.py)
-# ... (keep all other functions like seed_everything, compute_gradient_penalty)
-
-# --- NORMALIZATION CONSTANTS (Must match preprocessing) ---
+# --- MIDI GENERATION ---
 MAX_BEAT_TIME = 4.0
 
-
-
-def save_piano_roll_to_midi(notes_array, output_path, fs=100, bpm=120.0, scale_type='chromatic'):
+def save_piano_roll_to_midi(notes_array, output_path, fs=100, bpm=120.0, scale='major', root_key=0, instrument_name='Acoustic Grand Piano'):
     """
-    Converts GAN output to MIDI with MUSICAL THEORY ENFORCEMENT.
-    - scale_type: 'major', 'minor', or 'chromatic'
+    Converts GAN output to MIDI with:
+    1. Scale Snapping (Key enforcement)
+    2. Dynamic BPM
+    3. Dynamic Instrument Selection
     """
     bpm = max(60, min(bpm, 180))
     seconds_per_beat = 60.0 / bpm
 
     piano_midi = pretty_midi.PrettyMIDI(initial_tempo=bpm)
-    piano_program = pretty_midi.instrument_name_to_program('Acoustic Grand Piano')
-    piano_inst = pretty_midi.Instrument(program=piano_program)
+    
+    # --- INSTRUMENT SELECTION ---
+    try:
+        program = pretty_midi.instrument_name_to_program(instrument_name)
+    except:
+        print(f"[WARN] Instrument '{instrument_name}' not found. Defaulting to Piano.")
+        program = 0 
+        
+    piano_inst = pretty_midi.Instrument(program=program)
 
     current_time_beats = 0.0
-    
-    # --- 1. AGGRESSIVE SILENCE THRESHOLD ---
-    # Increased from -0.4 to -0.2 to remove more "clutter" notes
     VELOCITY_THRESHOLD = -0.2 
 
-    # --- 2. SCALE DEFINITIONS (C Major / C Minor) ---
-    # Notes allowed in C Major: C, D, E, F, G, A, B
-    SCALE_MAJOR = [0, 2, 4, 5, 7, 9, 11]
-    # Notes allowed in C Minor: C, D, Eb, F, G, Ab, Bb
-    SCALE_MINOR = [0, 2, 3, 5, 7, 8, 10]
+    # Build Allowed Notes
+    intervals = SCALES.get(scale, SCALES['chromatic'])
+    allowed_notes = [(interval + root_key) % 12 for interval in intervals]
+    allowed_notes.sort()
 
-    def snap_to_scale(pitch, scale_indices):
-        """Finds the nearest valid MIDI note in the given scale."""
+    def snap_to_scale(pitch):
         octave = pitch // 12
         note_in_octave = pitch % 12
-        # Find closest valid note
-        closest = min(scale_indices, key=lambda x: abs(x - note_in_octave))
+        closest = min(allowed_notes, key=lambda x: abs(x - note_in_octave))
         return (octave * 12) + closest
 
     for note_info in notes_array:
         norm_pitch, norm_velocity, norm_duration, norm_step = note_info
         
-        # Step size is always calculated to keep time moving
         step_beats = max(0.1, ((norm_step + 1.0) / 2.0) * MAX_BEAT_TIME)
         
-        # CHECK SILENCE
         if norm_velocity < VELOCITY_THRESHOLD:
             current_time_beats += step_beats
             continue 
 
-        # --- PITCH PROCESSING ---
-        # 1. Un-normalize to MIDI range
         pitch = int(((norm_pitch + 1.0) * 63.5))
-        pitch = np.clip(pitch, 36, 96) # Limit to reasonable piano range (C2-C7)
+        pitch = np.clip(pitch, 36, 96) 
+        pitch = snap_to_scale(pitch)
         
-        # 2. Scale Snapping (The "Musicality" Fix)
-        if scale_type == 'major':
-            pitch = snap_to_scale(pitch, SCALE_MAJOR)
-        elif scale_type == 'minor':
-            pitch = snap_to_scale(pitch, SCALE_MINOR)
-        
-        # --- VELOCITY PROCESSING ---
         vel_range = 1.0 - VELOCITY_THRESHOLD
         vel_offset = norm_velocity - VELOCITY_THRESHOLD
-        velocity = int(60 + (vel_offset / vel_range) * 67) # Min volume 60 (clearer sound)
+        velocity = int(60 + (vel_offset / vel_range) * 67)
         velocity = np.clip(velocity, 0, 127)
         
-        # --- DURATION PROCESSING ---
-        # Minimum duration 0.25 beats (16th note) to avoid "glitchy" short notes
         duration_beats = max(0.25, ((norm_duration + 1.0) / 2.0) * MAX_BEAT_TIME)
         
-        # Add Note
         start_sec = current_time_beats * seconds_per_beat
         end_sec = (current_time_beats + duration_beats) * seconds_per_beat
 
-        note = pretty_midi.Note(
-            velocity=velocity,
-            pitch=pitch,
-            start=start_sec,
-            end=end_sec
-        )
+        note = pretty_midi.Note(velocity=velocity, pitch=pitch, start=start_sec, end=end_sec)
         piano_inst.notes.append(note)
-        
         current_time_beats += step_beats
 
     piano_midi.instruments.append(piano_inst)
     piano_midi.write(output_path)
     
-    final_time_sec = piano_midi.get_end_time()
-    print(f"[INFO] Saved MIDI ({scale_type} scale) to {output_path}") 
-    
+    scale_name = f"{NOTE_NAMES[root_key]} {scale}"
+    print(f"[INFO] Saved MIDI ({instrument_name} | {scale_name}) to {output_path}")

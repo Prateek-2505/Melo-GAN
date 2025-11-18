@@ -30,12 +30,12 @@ python -m src.ae.encode \
 # python -m src.emotion_discriminator.train_ed --config config/ed_config.yaml
 # python -m src.gan.train_gan --config config/gan_config.yaml 
 
-python -m src.gan.test_gan --emotion happy --samples 2
-python -m src.gan.test_gan --emotion sad --samples 2
-python -m src.gan.test_gan --emotion angry --samples 2
-python -m src.gan.test_gan --emotion calm --samples 2
+python -m src.gan.test_gan --emotion happy --samples 1
+python -m src.gan.test_gan --emotion sad --samples 1
+python -m src.gan.test_gan --emotion angry --samples 1
+python -m src.gan.test_gan --emotion calm --samples 1
 # python -m src.gan.analyze_midi generated_tests/test_happy_1.mid generated_tests/test_sad_1.mid generated_tests/test_angry_1.mid generated_tests/test_calm_1.mid
-
+# python -m src.gan.analyze_midi generated_tests/test_calm_1.mid generated_tests/test_calm_2.mid
 
 # python -m src.gan.diagnose
 
