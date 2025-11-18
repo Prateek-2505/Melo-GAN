@@ -1,250 +1,208 @@
 """
-evaluate_ed.py
+Emotion Discriminator model for MELO-GAN Phase 1A.
 
-Evaluation / inference utilities for the Emotion Discriminator (ED).
+Supports two input modes:
+ - 'latent' : accepts encoder latent vectors (e.g. 128-d)
+ - 'notes'  : accepts (max_notes x note_dim) arrays, e.g. (512,4)
 
-Features:
- - Load a checkpoint saved by train_ed.py
- - Evaluate on test (or val/train) split and print metrics
- - Save predictions CSV, classification report (text), and confusion matrix PNG
- - Optional: score generated samples in a directory (npy/npz) and save their emotion probabilities
- - Handles both 'latent' and 'notes' input modes based on config
+Design:
+ - If input_mode == 'latent' -> MLP classifier
+ - If input_mode == 'notes'  -> Conv1D encoder -> pooled -> MLP classifier
+ - Optional spectral normalization and dropout for robustness.
 
 Usage:
-    python -m src.emotion_discriminator.evaluate_ed --config config/ed_config.yaml --ckpt data/models/ed/ed_best.pth
-
-Author: ChatGPT (for MELO-GAN Phase 1A)
-"""
-import os
-import yaml
-import argparse
-import time
-from typing import Optional, List, Tuple, Dict
-
-import torch
-import numpy as np
-import pandas as pd
-from torch.utils.data import DataLoader
-
-from .ed_model import EmotionDiscriminator
-from .ed_dataset import build_dataloader, EmotionDataset
-
-# sklearn for metrics (ensure installed in your env)
-from sklearn.metrics import (
-    accuracy_score,
-    classification_report,
-    confusion_matrix,
-    precision_recall_fscore_support
-)
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-
-def load_yaml(path: str) -> dict:
-    with open(path, "r") as f:
-        return yaml.safe_load(f)
-
-
-def load_checkpoint(path: str, device: torch.device = torch.device("cpu")) -> dict:
-    ckpt = torch.load(path, map_location=device)
-    return ckpt
-
-
-def build_model_from_cfg(cfg: dict, ckpt: Optional[dict] = None, device: torch.device = torch.device("cpu")) -> EmotionDiscriminator:
     model = EmotionDiscriminator(cfg)
-    model.to(device)
-    if ckpt is not None:
-        state = ckpt.get("model", ckpt)  # accept direct state_dict or full ckpt
-        model.load_state_dict(state)
-    model.eval()
-    return model
+    logits = model(x)             # raw logits (batch, n_classes)
+    probs  = torch.softmax(logits, dim=-1)
+"""
+
+from typing import Optional, Union, Dict
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 
 
-def run_inference_on_loader(model: torch.nn.Module, loader: DataLoader, device: torch.device) -> Tuple[np.ndarray, np.ndarray, List[dict]]:
-    ys_true = []
-    ys_pred = []
-    probs_list = []
-    metas = []
+class ConvBlock1D(nn.Module):
+    def __init__(self, in_ch, out_ch, kernel_size=3, stride=1, padding=1, use_sn=False):
+        super().__init__()
+        conv = nn.Conv1d(in_ch, out_ch, kernel_size, stride, padding)
+        if use_sn:
+            try:
+                from torch.nn.utils import spectral_norm
+                conv = spectral_norm(conv)
+            except Exception:
+                pass
+        self.net = nn.Sequential(
+            conv,
+            nn.BatchNorm1d(out_ch),
+            nn.GELU()
+        )
 
-    with torch.no_grad():
-        for batch in loader:
-            x = batch["x"].to(device)
-            y = batch["y"].cpu().numpy()
-            meta = batch.get("meta", None)
-
-            logits = model(x)
-            probs = torch.softmax(logits, dim=-1).cpu().numpy()
-            preds = probs.argmax(axis=-1)
-
-            ys_true.append(y)
-            ys_pred.append(preds)
-            probs_list.extend(probs.tolist())
-            metas.extend(meta if meta is not None else [{}] * len(y))
-
-    y_true = np.concatenate(ys_true, axis=0)
-    y_pred = np.concatenate(ys_pred, axis=0)
-    return y_true, y_pred, probs_list, metas
+    def forward(self, x):
+        return self.net(x)
 
 
-def plot_and_save_confusion_matrix(y_true: np.ndarray, y_pred: np.ndarray, labels: List[str], out_png: str):
-    cm = confusion_matrix(y_true, y_pred, labels=list(range(len(labels))))
-    fig, ax = plt.subplots(figsize=(7, 6))
-    sns.heatmap(cm, annot=True, fmt="d", xticklabels=labels, yticklabels=labels, cmap="Blues", ax=ax)
-    ax.set_xlabel("Predicted")
-    ax.set_ylabel("True")
-    ax.set_title("Confusion Matrix")
-    fig.tight_layout()
-    fig.savefig(out_png, dpi=150)
-    plt.close(fig)
+class NotesEncoder(nn.Module):
+    """
+    Encodes (batch, max_notes, note_dim) -> (batch, hidden_dim)
+    Uses a stack of Conv1D blocks over the time/notes axis.
+    """
+    def __init__(self, note_dim: int = 4, hidden_dim: int = 256, num_blocks: int = 4, use_sn: bool = False):
+        super().__init__()
+        layers = []
+        in_ch = note_dim
+        ch = 64
+        for i in range(num_blocks):
+            layers.append(ConvBlock1D(in_ch, ch, kernel_size=5 if i == 0 else 3, padding=2 if i == 0 else 1, use_sn=use_sn))
+            in_ch = ch
+            ch = min(ch * 2, hidden_dim)
+        self.conv = nn.Sequential(*layers)
+        self.pool = nn.AdaptiveAvgPool1d(1)  # collapse temporal axis
+        self.project = nn.Linear(in_ch, hidden_dim)
+
+    def forward(self, notes):  # notes: (B, T, D)
+        # convert to (B, D, T)
+        x = notes.permute(0, 2, 1)
+        x = self.conv(x)           # (B, C, T)
+        x = self.pool(x).squeeze(-1)  # (B, C)
+        x = self.project(x)        # (B, hidden_dim)
+        return x
 
 
-def save_classification_report(y_true: np.ndarray, y_pred: np.ndarray, labels: List[str], out_txt: str):
-    report = classification_report(y_true, y_pred, target_names=labels, digits=4)
-    with open(out_txt, "w") as f:
-        f.write(report)
-    return report
-
-
-def save_predictions_csv(y_true: np.ndarray, y_pred: np.ndarray, probs_list: List[List[float]], metas: List[dict], out_csv: str, labels: List[str]):
-    rows = []
-    for i in range(len(y_true)):
-        row = {
-            "true_label": int(y_true[i]),
-            "pred_label": int(y_pred[i]),
-            "true_label_name": labels[int(y_true[i])] if 0 <= int(y_true[i]) < len(labels) else str(y_true[i]),
-            "pred_label_name": labels[int(y_pred[i])] if 0 <= int(y_pred[i]) < len(labels) else str(y_pred[i]),
-        }
-        # add probs as separate columns
-        for j, p in enumerate(probs_list[i]):
-            row[f"prob_{j}_{labels[j]}"] = float(p)
-        # include meta keys (flatten small subset)
-        meta = metas[i] if metas and i < len(metas) else {}
-        if isinstance(meta, dict):
-            for k, v in meta.items():
-                # avoid huge blobs
+class MLPClassifier(nn.Module):
+    def __init__(self, in_dim: int, hidden_dims=(256, 128), n_classes: int = 4, dropout: float = 0.2, use_sn: bool = False):
+        super().__init__()
+        layers = []
+        prev = in_dim
+        for h in hidden_dims:
+            lin = nn.Linear(prev, h)
+            if use_sn:
                 try:
-                    row[f"meta_{k}"] = str(v)
+                    from torch.nn.utils import spectral_norm
+                    lin = spectral_norm(lin)
                 except Exception:
-                    row[f"meta_{k}"] = ""
-        rows.append(row)
-    df = pd.DataFrame(rows)
-    df.to_csv(out_csv, index=False)
-    return df
+                    pass
+            layers.append(lin)
+            layers.append(nn.GELU())
+            layers.append(nn.Dropout(dropout))
+            prev = h
+        self.net = nn.Sequential(*layers)
+        self.head = nn.Linear(prev, n_classes)
+
+    def forward(self, x):
+        x = self.net(x)
+        logits = self.head(x)
+        return logits
 
 
-def score_generated_samples_dir(model: torch.nn.Module, gen_dir: str, cfg: dict, device: torch.device) -> pd.DataFrame:
+class EmotionDiscriminator(nn.Module):
     """
-    Score generated samples found in gen_dir.
-    Accepts .npy (latent vectors) or .npz (notes arrays).
-    Returns a DataFrame with filename, top_pred, top_prob, probs...
+    High-level wrapper for emotion classifier.
+
+    Configurable via dictionary `cfg`:
+      cfg = {
+        'input_mode': 'latent' or 'notes',
+        'latent_dim': 128,
+        'note_dim': 4,
+        'notes_hidden': 256,
+        'notes_blocks': 4,
+        'mlp_hidden': [256, 128],
+        'n_classes': 4,
+        'dropout': 0.2,
+        'use_spectral_norm': False
+      }
     """
-    files = sorted([os.path.join(gen_dir, f) for f in os.listdir(gen_dir) if f.endswith((".npy", ".npz"))])
-    out_rows = []
-    labels = cfg.get("labels", ["happy", "sad", "angry", "calm"])
-    for p in files:
-        try:
-            if p.endswith(".npy"):
-                arr = np.load(p)
-                x = torch.from_numpy(np.asarray(arr, dtype=np.float32)).unsqueeze(0).to(device)
-            else:
-                # .npz expected to contain 'notes' or arr_0
-                data = np.load(p, allow_pickle=True)
-                if "notes" in data:
-                    notes = data["notes"]
-                else:
-                    notes = data.get("arr_0", None)
-                    if notes is None:
-                        notes = data[list(data.files)[0]]
-                # pad/truncate to max_notes if necessary
-                maxn = int(cfg.get("max_notes", 512))
-                note_dim = int(cfg.get("note_dim", 4))
-                notes = np.asarray(notes, dtype=np.float32)
-                if notes.ndim == 1:
-                    notes = notes.reshape(-1, note_dim)
-                T = notes.shape[0]
-                if T >= maxn:
-                    notes = notes[:maxn]
-                else:
-                    pad = np.zeros((maxn - T, note_dim), dtype=np.float32)
-                    notes = np.concatenate([notes, pad], axis=0)
-                x = torch.from_numpy(notes).unsqueeze(0).to(device)
-            with torch.no_grad():
-                logits = model(x)
-                probs = torch.softmax(logits, dim=-1).cpu().numpy()[0]
-                pred = int(probs.argmax())
-                out_rows.append({
-                    "file": os.path.basename(p),
-                    "pred_label": pred,
-                    "pred_label_name": labels[pred] if pred < len(labels) else str(pred),
-                    "top_prob": float(probs[pred]),
-                    **{f"prob_{i}_{labels[i]}": float(probs[i]) for i in range(len(probs))}
-                })
-        except Exception as e:
-            out_rows.append({"file": os.path.basename(p), "error": str(e)})
-    return pd.DataFrame(out_rows)
+    def __init__(self, cfg: Dict):
+        super().__init__()
+        self.cfg = cfg.copy()
+        self.input_mode = cfg.get('input_mode', 'latent')
+        self.n_classes = cfg.get('n_classes', 4)
+        self.use_sn = cfg.get('use_spectral_norm', False)
+        self.dropout = cfg.get('dropout', 0.2)
 
+        if self.input_mode == 'latent':
+            latent_dim = cfg.get('latent_dim', 128)
+            self.encoder = None
+            self.classifier = MLPClassifier(in_dim=latent_dim,
+                                            hidden_dims=tuple(cfg.get('mlp_hidden', (256, 128))),
+                                            n_classes=self.n_classes,
+                                            dropout=self.dropout,
+                                            use_sn=self.use_sn)
+        elif self.input_mode == 'notes':
+            note_dim = cfg.get('note_dim', 4)
+            notes_hidden = cfg.get('notes_hidden', 256)
+            notes_blocks = cfg.get('notes_blocks', 4)
+            self.encoder = NotesEncoder(note_dim=note_dim,
+                                        hidden_dim=notes_hidden,
+                                        num_blocks=notes_blocks,
+                                        use_sn=self.use_sn)
+            self.classifier = MLPClassifier(in_dim=notes_hidden,
+                                            hidden_dims=tuple(cfg.get('mlp_hidden', (256, 128))),
+                                            n_classes=self.n_classes,
+                                            dropout=self.dropout,
+                                            use_sn=self.use_sn)
+        else:
+            raise ValueError("input_mode must be 'latent' or 'notes'")
 
-def main(argv=None):
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, default="config/ed_config.yaml")
-    parser.add_argument("--ckpt", type=str, required=True, help="Path to checkpoint (ed_best.pth or ed_epochXX.pth)")
-    parser.add_argument("--split", type=str, default="test", choices=["train", "val", "test"])
-    parser.add_argument("--gen_dir", type=str, default=None, help="Optional: directory of generated samples to score")
-    parser.add_argument("--out_dir", type=str, default=None, help="Optional override for output dir (defaults to cfg.log_dir)")
-    parser.add_argument("--device", type=str, default=None)
-    args = parser.parse_args(argv)
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Forward pass.
+        x: either (B, latent_dim) when input_mode == 'latent'
+           or (B, T, note_dim) when input_mode == 'notes'
+        returns logits (B, n_classes)
+        """
+        if self.input_mode == 'latent':
+            if x.dim() != 2:
+                raise ValueError(f"Expected latent input shape (B, latent_dim), got {x.shape}")
+            feats = x
+        else:
+            # notes path
+            if x.dim() != 3:
+                raise ValueError(f"Expected notes input shape (B, T, note_dim), got {x.shape}")
+            feats = self.encoder(x)
 
-    cfg = load_yaml(args.config)
-    labels = cfg.get("labels", ["happy", "sad", "angry", "calm"])
-    out_base = args.out_dir or cfg.get("log_dir", "data/experiments/ed")
-    os.makedirs(out_base, exist_ok=True)
+        logits = self.classifier(feats)
+        return logits
 
-    device = torch.device(args.device or cfg.get("device", "cpu"))
+    def predict_proba(self, x: torch.Tensor) -> torch.Tensor:
+        logits = self.forward(x)
+        return F.softmax(logits, dim=-1)
 
-    print(f"Loading checkpoint {args.ckpt} on device {device} ...")
-    ckpt = load_checkpoint(args.ckpt, device=device)
-    model = build_model_from_cfg(cfg, ckpt=ckpt, device=device)
+    def predict(self, x: torch.Tensor) -> torch.Tensor:
+        logits = self.forward(x)
+        return logits.argmax(dim=-1)
 
-    print("Building dataloader for split:", args.split)
-    loader = build_dataloader(cfg, split=args.split, shuffle=False)
+    def freeze_encoder(self):
+        if self.encoder is not None:
+            for p in self.encoder.parameters():
+                p.requires_grad = False
 
-    print("Running inference...")
-    t0 = time.time()
-    y_true, y_pred, probs_list, metas = run_inference_on_loader(model, loader, device)
-    t1 = time.time()
-    print(f"Inference done in {t1 - t0:.2f}s. Samples: {len(y_true)}")
-
-    # metrics
-    acc = accuracy_score(y_true, y_pred)
-    prec, recall, f1, _ = precision_recall_fscore_support(y_true, y_pred, average="weighted", zero_division=0)
-    print(f"Accuracy: {acc:.4f}  Precision: {prec:.4f}  Recall: {recall:.4f}  F1: {f1:.4f}")
-
-    # save confusion matrix
-    cm_png = os.path.join(out_base, f"confusion_{args.split}.png")
-    plot_and_save_confusion_matrix(y_true, y_pred, labels, cm_png)
-    print("Saved confusion matrix to", cm_png)
-
-    # save classification report
-    report_txt = os.path.join(out_base, f"classification_report_{args.split}.txt")
-    report = save_classification_report(y_true, y_pred, labels, report_txt)
-    print("Saved classification report to", report_txt)
-    print(report)
-
-    # save predictions csv
-    preds_csv = os.path.join(out_base, f"predictions_{args.split}.csv")
-    df_preds = save_predictions_csv(y_true, y_pred, probs_list, metas, preds_csv, labels)
-    print("Saved predictions to", preds_csv)
-
-    # optionally score generated samples
-    if args.gen_dir:
-        print("Scoring generated samples in", args.gen_dir)
-        df_gen = score_generated_samples_dir(model, args.gen_dir, cfg, device)
-        gen_out = os.path.join(out_base, "generated_samples_scored.csv")
-        df_gen.to_csv(gen_out, index=False)
-        print("Saved generated samples scores to", gen_out)
-
-    print("\nDone.")
+    def unfreeze_encoder(self):
+        if self.encoder is not None:
+            for p in self.encoder.parameters():
+                p.requires_grad = True
 
 
 if __name__ == "__main__":
-    main()
+    # very small smoke test
+    cfg_latent = {
+        'input_mode': 'latent',
+        'latent_dim': 128,
+        'mlp_hidden': [256, 128],
+        'n_classes': 4
+    }
+    m = EmotionDiscriminator(cfg_latent)
+    x = torch.randn(8, 128)
+    print("latent logits:", m(x).shape)
+
+    cfg_notes = {
+        'input_mode': 'notes',
+        'note_dim': 4,
+        'notes_hidden': 256,
+        'notes_blocks': 3,
+        'mlp_hidden': [256, 128],
+        'n_classes': 4
+    }
+    m2 = EmotionDiscriminator(cfg_notes)
+    x2 = torch.randn(8, 512, 4)
+    print("notes logits:", m2(x2).shape)

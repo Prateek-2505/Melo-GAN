@@ -1,193 +1,193 @@
-file_key,emotion,source,full_path,npz_filename
-Q4_V3Y9L4UOcpk_1,calm,emopia,data/raw/labelled/emopia/Q4_V3Y9L4UOcpk_1.mid,emopia_Q4_V3Y9L4UOcpk_1.npz
-Q3_wqc8iqbDsGM_1,sad,emopia,data/raw/labelled/emopia/Q3_wqc8iqbDsGM_1.mid,emopia_Q3_wqc8iqbDsGM_1.npz
-Q4_XWk5XUEBXmg_0,calm,emopia,data/raw/labelled/emopia/Q4_XWk5XUEBXmg_0.mid,emopia_Q4_XWk5XUEBXmg_0.npz
-Q3_JT1XJnVmABo_1,sad,emopia,data/raw/labelled/emopia/Q3_JT1XJnVmABo_1.mid,emopia_Q3_JT1XJnVmABo_1.npz
-Q2_7n32BtYb4d4_3,angry,emopia,data/raw/labelled/emopia/Q2_7n32BtYb4d4_3.mid,emopia_Q2_7n32BtYb4d4_3.npz
-Q1_s6-SbDSZzEU_0,happy,emopia,data/raw/labelled/emopia/Q1_s6-SbDSZzEU_0.mid,emopia_Q1_s6-SbDSZzEU_0.npz
-Q3_x4B0raxVODA_1,sad,emopia,data/raw/labelled/emopia/Q3_x4B0raxVODA_1.mid,emopia_Q3_x4B0raxVODA_1.npz
-Q4_YAAxPW1GB7w_0,calm,emopia,data/raw/labelled/emopia/Q4_YAAxPW1GB7w_0.mid,emopia_Q4_YAAxPW1GB7w_0.npz
-labelled/phrases/The Legend of Zelda_N64_The Legend of Zelda Majora's Mask_Alien Invasion_0.mid,angry,vgmidi,data/raw/labelled/vgmidi/The Legend of Zelda_N64_The Legend of Zelda Majora's Mask_Alien Invasion.mid,vgmidi_The_Legend_of_Zelda_N64_The_Legend_of_Zelda_Majora_s_Mask_Alien_Invasion.npz
-Q2_CxFXrYgdSSI_0,angry,emopia,data/raw/labelled/emopia/Q2_CxFXrYgdSSI_0.mid,emopia_Q2_CxFXrYgdSSI_0.npz
-Q3_K84TcgjCRt4_2,sad,emopia,data/raw/labelled/emopia/Q3_K84TcgjCRt4_2.mid,emopia_Q3_K84TcgjCRt4_2.npz
-Q2_7n32BtYb4d4_0,angry,emopia,data/raw/labelled/emopia/Q2_7n32BtYb4d4_0.mid,emopia_Q2_7n32BtYb4d4_0.npz
-Q2_TcFVq0leii4_1,angry,emopia,data/raw/labelled/emopia/Q2_TcFVq0leii4_1.mid,emopia_Q2_TcFVq0leii4_1.npz
-Q3_D8Ed5PZXfF4_0,sad,emopia,data/raw/labelled/emopia/Q3_D8Ed5PZXfF4_0.mid,emopia_Q3_D8Ed5PZXfF4_0.npz
-labelled/phrases/Indiana Jones_PC_Indiana Jones and the Fate of Atlantis_Crossing_0.mid,happy,vgmidi,data/raw/labelled/vgmidi/Indiana Jones_PC_Indiana Jones and the Fate of Atlantis_Crossing.mid,vgmidi_Indiana_Jones_PC_Indiana_Jones_and_the_Fate_of_Atlantis_Crossing.npz
-Q2_l-4Kce3YxxQ_2,angry,emopia,data/raw/labelled/emopia/Q2_l-4Kce3YxxQ_2.mid,emopia_Q2_l-4Kce3YxxQ_2.npz
-Q1_RaUSISlnhKw_1,happy,emopia,data/raw/labelled/emopia/Q1_RaUSISlnhKw_1.mid,emopia_Q1_RaUSISlnhKw_1.npz
-Q4_vpTguZtJAFA_2,calm,emopia,data/raw/labelled/emopia/Q4_vpTguZtJAFA_2.mid,emopia_Q4_vpTguZtJAFA_2.npz
-Q3_vVTP0DOL_2Q_1,sad,emopia,data/raw/labelled/emopia/Q3_vVTP0DOL_2Q_1.mid,emopia_Q3_vVTP0DOL_2Q_1.npz
-Q2_S1T3UF1vhSk_1,angry,emopia,data/raw/labelled/emopia/Q2_S1T3UF1vhSk_1.mid,emopia_Q2_S1T3UF1vhSk_1.npz
-Q4_1fdxsFbnsX4_0,calm,emopia,data/raw/labelled/emopia/Q4_1fdxsFbnsX4_0.mid,emopia_Q4_1fdxsFbnsX4_0.npz
-labelled/phrases/Other_N64_GoldenEye 007_Statue_0.mid,sad,vgmidi,data/raw/labelled/vgmidi/Other_N64_GoldenEye 007_Statue.mid,vgmidi_Other_N64_GoldenEye_007_Statue.npz
-Q4_UaYYMRkHMYc_2,calm,emopia,data/raw/labelled/emopia/Q4_UaYYMRkHMYc_2.mid,emopia_Q4_UaYYMRkHMYc_2.npz
-Q2_UAm0aWvzFI8_1,angry,emopia,data/raw/labelled/emopia/Q2_UAm0aWvzFI8_1.mid,emopia_Q2_UAm0aWvzFI8_1.npz
-labelled/phrases/Xeno_PS1_Xenogears_Knight of Fire_0.mid,angry,vgmidi,data/raw/labelled/vgmidi/Xeno_PS1_Xenogears_Knight of Fire.mid,vgmidi_Xeno_PS1_Xenogears_Knight_of_Fire.npz
-Q2_61EA0xRX8gE_1,angry,emopia,data/raw/labelled/emopia/Q2_61EA0xRX8gE_1.mid,emopia_Q2_61EA0xRX8gE_1.npz
-Q3_QJlnTN7HRwE_3,sad,emopia,data/raw/labelled/emopia/Q3_QJlnTN7HRwE_3.mid,emopia_Q3_QJlnTN7HRwE_3.npz
-labelled/phrases/Final Fantasy_PS1_Final Fantasy VII_Great Warrior_0.mid,calm,vgmidi,data/raw/labelled/vgmidi/Final Fantasy_PS1_Final Fantasy VII_Great Warrior.mid,vgmidi_Final_Fantasy_PS1_Final_Fantasy_VII_Great_Warrior.npz
-Q4_Tc684nD8CEA_2,calm,emopia,data/raw/labelled/emopia/Q4_Tc684nD8CEA_2.mid,emopia_Q4_Tc684nD8CEA_2.npz
-labelled/phrases/Indiana Jones_PC_Indiana Jones and the Last Crusade_The Holy Grail_0.mid,sad,vgmidi,data/raw/labelled/vgmidi/Indiana Jones_PC_Indiana Jones and the Last Crusade_The Holy Grail.mid,vgmidi_Indiana_Jones_PC_Indiana_Jones_and_the_Last_Crusade_The_Holy_Grail.npz
-Q2_jO2zX6Ul8GM_0,angry,emopia,data/raw/labelled/emopia/Q2_jO2zX6Ul8GM_0.mid,emopia_Q2_jO2zX6Ul8GM_0.npz
-Q4_XWk5XUEBXmg_1,calm,emopia,data/raw/labelled/emopia/Q4_XWk5XUEBXmg_1.mid,emopia_Q4_XWk5XUEBXmg_1.npz
-Q1_KxlqB3j0zys_0,happy,emopia,data/raw/labelled/emopia/Q1_KxlqB3j0zys_0.mid,emopia_Q1_KxlqB3j0zys_0.npz
-Q2_CxFXrYgdSSI_1,angry,emopia,data/raw/labelled/emopia/Q2_CxFXrYgdSSI_1.mid,emopia_Q2_CxFXrYgdSSI_1.npz
-labelled/phrases/Mana_SNES_Secret of Mana_Tell A Strange Tale_0.mid,happy,vgmidi,data/raw/labelled/vgmidi/Mana_SNES_Secret of Mana_Tell A Strange Tale.mid,vgmidi_Mana_SNES_Secret_of_Mana_Tell_A_Strange_Tale.npz
-labelled/phrases/Banjo-Kazooie_N64_Banjo-Tooie_Here Comes Trouble_0.mid,angry,vgmidi,data/raw/labelled/vgmidi/Banjo-Kazooie_N64_Banjo-Tooie_Here Comes Trouble.mid,vgmidi_Banjo-Kazooie_N64_Banjo-Tooie_Here_Comes_Trouble.npz
-Q2_8c7kcmsnf-s_2,angry,emopia,data/raw/labelled/emopia/Q2_8c7kcmsnf-s_2.mid,emopia_Q2_8c7kcmsnf-s_2.npz
-Q2_ijfxkQPAQdE_1,angry,emopia,data/raw/labelled/emopia/Q2_ijfxkQPAQdE_1.mid,emopia_Q2_ijfxkQPAQdE_1.npz
-Q3_16OaOpfOPZ0_1,sad,emopia,data/raw/labelled/emopia/Q3_16OaOpfOPZ0_1.mid,emopia_Q3_16OaOpfOPZ0_1.npz
-Q2_jrVXitpLGMk_0,angry,emopia,data/raw/labelled/emopia/Q2_jrVXitpLGMk_0.mid,emopia_Q2_jrVXitpLGMk_0.npz
-Q4_biROWEwkDQQ_0,calm,emopia,data/raw/labelled/emopia/Q4_biROWEwkDQQ_0.mid,emopia_Q4_biROWEwkDQQ_0.npz
-Q2_kKFwiXKlhC8_1,angry,emopia,data/raw/labelled/emopia/Q2_kKFwiXKlhC8_1.mid,emopia_Q2_kKFwiXKlhC8_1.npz
-labelled/phrases/Chrono_SNES_Chrono Trigger_Ocean Palace_0.mid,angry,vgmidi,data/raw/labelled/vgmidi/Chrono_SNES_Chrono Trigger_Ocean Palace.mid,vgmidi_Chrono_SNES_Chrono_Trigger_Ocean_Palace.npz
-Q4_pRuwHN-lI44_3,calm,emopia,data/raw/labelled/emopia/Q4_pRuwHN-lI44_3.mid,emopia_Q4_pRuwHN-lI44_3.npz
-Q1_6kRPHamGDSo_1,happy,emopia,data/raw/labelled/emopia/Q1_6kRPHamGDSo_1.mid,emopia_Q1_6kRPHamGDSo_1.npz
-Q3_9Xg69XrVaYU_1,sad,emopia,data/raw/labelled/emopia/Q3_9Xg69XrVaYU_1.mid,emopia_Q3_9Xg69XrVaYU_1.npz
-Q3_QJlnTN7HRwE_1,sad,emopia,data/raw/labelled/emopia/Q3_QJlnTN7HRwE_1.mid,emopia_Q3_QJlnTN7HRwE_1.npz
-Q4_prUUays30Mg_1,calm,emopia,data/raw/labelled/emopia/Q4_prUUays30Mg_1.mid,emopia_Q4_prUUays30Mg_1.npz
-labelled/phrases/Banjo-Kazooie_N64_Banjo-Tooie_Witchy World_0.mid,sad,vgmidi,data/raw/labelled/vgmidi/Banjo-Kazooie_N64_Banjo-Tooie_Witchy World.mid,vgmidi_Banjo-Kazooie_N64_Banjo-Tooie_Witchy_World.npz
-Q1_RaUSISlnhKw_0,happy,emopia,data/raw/labelled/emopia/Q1_RaUSISlnhKw_0.mid,emopia_Q1_RaUSISlnhKw_0.npz
-Q2_DYBBfpEx-JI_1,angry,emopia,data/raw/labelled/emopia/Q2_DYBBfpEx-JI_1.mid,emopia_Q2_DYBBfpEx-JI_1.npz
-Q4_bfopzItCYrE_2,calm,emopia,data/raw/labelled/emopia/Q4_bfopzItCYrE_2.mid,emopia_Q4_bfopzItCYrE_2.npz
-Q4_61EA0xRX8gE_2,calm,emopia,data/raw/labelled/emopia/Q4_61EA0xRX8gE_2.mid,emopia_Q4_61EA0xRX8gE_2.npz
-labelled/phrases/Final Fantasy_PS1_Final Fantasy VII_Electric de Chocobo_0.mid,happy,vgmidi,data/raw/labelled/vgmidi/Final Fantasy_PS1_Final Fantasy VII_Electric de Chocobo.mid,vgmidi_Final_Fantasy_PS1_Final_Fantasy_VII_Electric_de_Chocobo.npz
-Q4_Ie5koh4qvJc_21,calm,emopia,data/raw/labelled/emopia/Q4_Ie5koh4qvJc_21.mid,emopia_Q4_Ie5koh4qvJc_21.npz
-Q4_22S3w4idugs_0,calm,emopia,data/raw/labelled/emopia/Q4_22S3w4idugs_0.mid,emopia_Q4_22S3w4idugs_0.npz
-Q4_Xf2fox7zhCQ_2,calm,emopia,data/raw/labelled/emopia/Q4_Xf2fox7zhCQ_2.mid,emopia_Q4_Xf2fox7zhCQ_2.npz
-Q2_61EA0xRX8gE_5,angry,emopia,data/raw/labelled/emopia/Q2_61EA0xRX8gE_5.mid,emopia_Q2_61EA0xRX8gE_5.npz
-Q3_xYZ8n8ULaNo_0,sad,emopia,data/raw/labelled/emopia/Q3_xYZ8n8ULaNo_0.mid,emopia_Q3_xYZ8n8ULaNo_0.npz
-Q3_By3JCii1k3w_1,sad,emopia,data/raw/labelled/emopia/Q3_By3JCii1k3w_1.mid,emopia_Q3_By3JCii1k3w_1.npz
-Q1_94ROf10d1iA_1,happy,emopia,data/raw/labelled/emopia/Q1_94ROf10d1iA_1.mid,emopia_Q1_94ROf10d1iA_1.npz
-Q2_8c7kcmsnf-s_1,angry,emopia,data/raw/labelled/emopia/Q2_8c7kcmsnf-s_1.mid,emopia_Q2_8c7kcmsnf-s_1.npz
-Q3_nBao46YGZDg_0,sad,emopia,data/raw/labelled/emopia/Q3_nBao46YGZDg_0.mid,emopia_Q3_nBao46YGZDg_0.npz
-Q1_vv6nrZ2myXw_3,happy,emopia,data/raw/labelled/emopia/Q1_vv6nrZ2myXw_3.mid,emopia_Q1_vv6nrZ2myXw_3.npz
-labelled/phrases/Banjo-Kazooie_N64_Banjo-Tooie_Cauldron Keep_0.mid,angry,vgmidi,data/raw/labelled/vgmidi/Banjo-Kazooie_N64_Banjo-Tooie_Cauldron Keep.mid,vgmidi_Banjo-Kazooie_N64_Banjo-Tooie_Cauldron_Keep.npz
-Q4_Cir1kZyB7QM_1,calm,emopia,data/raw/labelled/emopia/Q4_Cir1kZyB7QM_1.mid,emopia_Q4_Cir1kZyB7QM_1.npz
-Q4_ADJ_PDauy-g_1,calm,emopia,data/raw/labelled/emopia/Q4_ADJ_PDauy-g_1.mid,emopia_Q4_ADJ_PDauy-g_1.npz
-Q3_ldCQ6N9G6Mk_3,sad,emopia,data/raw/labelled/emopia/Q3_ldCQ6N9G6Mk_3.mid,emopia_Q3_ldCQ6N9G6Mk_3.npz
-Q4_Tc684nD8CEA_3,calm,emopia,data/raw/labelled/emopia/Q4_Tc684nD8CEA_3.mid,emopia_Q4_Tc684nD8CEA_3.npz
-labelled/phrases/Other_PC_Warcraft III Reign of Chaos_Blackrock and Roll_0.mid,angry,vgmidi,data/raw/labelled/vgmidi/Other_PC_Warcraft III Reign of Chaos_Blackrock and Roll.mid,vgmidi_Other_PC_Warcraft_III_Reign_of_Chaos_Blackrock_and_Roll.npz
-Q1_POaIGvLsp5M_1,happy,emopia,data/raw/labelled/emopia/Q1_POaIGvLsp5M_1.mid,emopia_Q1_POaIGvLsp5M_1.npz
-Q1_94ROf10d1iA_0,happy,emopia,data/raw/labelled/emopia/Q1_94ROf10d1iA_0.mid,emopia_Q1_94ROf10d1iA_0.npz
-Q4_oTi57hZfArE_2,calm,emopia,data/raw/labelled/emopia/Q4_oTi57hZfArE_2.mid,emopia_Q4_oTi57hZfArE_2.npz
-Q1__8v0MFBZoco_1,happy,emopia,data/raw/labelled/emopia/Q1__8v0MFBZoco_1.mid,emopia_Q1__8v0MFBZoco_1.npz
-Q2_o20YCzej5_s_0,angry,emopia,data/raw/labelled/emopia/Q2_o20YCzej5_s_0.mid,emopia_Q2_o20YCzej5_s_0.npz
-Q4_Tc684nD8CEA_4,calm,emopia,data/raw/labelled/emopia/Q4_Tc684nD8CEA_4.mid,emopia_Q4_Tc684nD8CEA_4.npz
-Q2_8c7kcmsnf-s_0,angry,emopia,data/raw/labelled/emopia/Q2_8c7kcmsnf-s_0.mid,emopia_Q2_8c7kcmsnf-s_0.npz
-Q4_6kRPHamGDSo_2,calm,emopia,data/raw/labelled/emopia/Q4_6kRPHamGDSo_2.mid,emopia_Q4_6kRPHamGDSo_2.npz
-Q3_yZGBxiNPu3k_1,sad,emopia,data/raw/labelled/emopia/Q3_yZGBxiNPu3k_1.mid,emopia_Q3_yZGBxiNPu3k_1.npz
-Q2_0v2N1ROvEI0_0,angry,emopia,data/raw/labelled/emopia/Q2_0v2N1ROvEI0_0.mid,emopia_Q2_0v2N1ROvEI0_0.npz
-Q4_vBHoSz8cJIE_1,calm,emopia,data/raw/labelled/emopia/Q4_vBHoSz8cJIE_1.mid,emopia_Q4_vBHoSz8cJIE_1.npz
-Q2_fuCxYrru2S4_1,angry,emopia,data/raw/labelled/emopia/Q2_fuCxYrru2S4_1.mid,emopia_Q2_fuCxYrru2S4_1.npz
-Q1_aYe-2Glruu4_0,happy,emopia,data/raw/labelled/emopia/Q1_aYe-2Glruu4_0.mid,emopia_Q1_aYe-2Glruu4_0.npz
-Q2_ANZf1QXsNrY_7,angry,emopia,data/raw/labelled/emopia/Q2_ANZf1QXsNrY_7.mid,emopia_Q2_ANZf1QXsNrY_7.npz
-labelled/phrases/The Legend of Zelda_N64_The Legend of Zelda Ocarina of Time_Temple of Time_0.mid,sad,vgmidi,data/raw/labelled/vgmidi/The Legend of Zelda_N64_The Legend of Zelda Ocarina of Time_Temple of Time.mid,vgmidi_The_Legend_of_Zelda_N64_The_Legend_of_Zelda_Ocarina_of_Time_Temple_of_Time.npz
-labelled/phrases/Chrono_SNES_Chrono Trigger_Silent Light_0.mid,happy,vgmidi,data/raw/labelled/vgmidi/Chrono_SNES_Chrono Trigger_Silent Light.mid,vgmidi_Chrono_SNES_Chrono_Trigger_Silent_Light.npz
-Q1_60LLKmpgzRM_0,happy,emopia,data/raw/labelled/emopia/Q1_60LLKmpgzRM_0.mid,emopia_Q1_60LLKmpgzRM_0.npz
-Q3_fnqb8zqHqdY_2,sad,emopia,data/raw/labelled/emopia/Q3_fnqb8zqHqdY_2.mid,emopia_Q3_fnqb8zqHqdY_2.npz
-Q1_e838BE_MH6s_3,happy,emopia,data/raw/labelled/emopia/Q1_e838BE_MH6s_3.mid,emopia_Q1_e838BE_MH6s_3.npz
-Q3_S1T3UF1vhSk_0,sad,emopia,data/raw/labelled/emopia/Q3_S1T3UF1vhSk_0.mid,emopia_Q3_S1T3UF1vhSk_0.npz
-labelled/phrases/The Legend of Zelda_N64_The Legend of Zelda Ocarina of Time_Kokiri Forest_0.mid,happy,vgmidi,data/raw/labelled/vgmidi/The Legend of Zelda_N64_The Legend of Zelda Ocarina of Time_Kokiri Forest.mid,vgmidi_The_Legend_of_Zelda_N64_The_Legend_of_Zelda_Ocarina_of_Time_Kokiri_Forest.npz
-labelled/phrases/The Legend of Zelda_N64_The Legend of Zelda Ocarina of Time_Hyrule Castle Courtyard_0.mid,happy,vgmidi,data/raw/labelled/vgmidi/The Legend of Zelda_N64_The Legend of Zelda Ocarina of Time_Hyrule Castle Courtyard.mid,vgmidi_The_Legend_of_Zelda_N64_The_Legend_of_Zelda_Ocarina_of_Time_Hyrule_Castle_Courtyard.npz
-labelled/phrases/Banjo-Kazooie_N64_Banjo-Tooie_Chilly Willy Chilli Billi_0.mid,angry,vgmidi,data/raw/labelled/vgmidi/Banjo-Kazooie_N64_Banjo-Tooie_Chilly Willy Chilli Billi.mid,vgmidi_Banjo-Kazooie_N64_Banjo-Tooie_Chilly_Willy_Chilli_Billi.npz
-Q3_wfXSdMsd4q8_2,sad,emopia,data/raw/labelled/emopia/Q3_wfXSdMsd4q8_2.mid,emopia_Q3_wfXSdMsd4q8_2.npz
-Q3_PLfFWFZflQU_0,sad,emopia,data/raw/labelled/emopia/Q3_PLfFWFZflQU_0.mid,emopia_Q3_PLfFWFZflQU_0.npz
-Q2__S991V8N-8s_1,angry,emopia,data/raw/labelled/emopia/Q2__S991V8N-8s_1.mid,emopia_Q2__S991V8N-8s_1.npz
-Q2_JMt4m608s3k_2,angry,emopia,data/raw/labelled/emopia/Q2_JMt4m608s3k_2.mid,emopia_Q2_JMt4m608s3k_2.npz
-labelled/phrases/Battle of Olympus_NES_Battle of Olympus_Orpheus Journey Arranged_0.mid,calm,vgmidi,data/raw/labelled/vgmidi/Battle of Olympus_NES_Battle of Olympus_Orpheus Journey Arranged.mid,vgmidi_Battle_of_Olympus_NES_Battle_of_Olympus_Orpheus_Journey_Arranged.npz
-Q1_Xsn9zT-05ns_0,happy,emopia,data/raw/labelled/emopia/Q1_Xsn9zT-05ns_0.mid,emopia_Q1_Xsn9zT-05ns_0.npz
-Q3_x4B0raxVODA_3,sad,emopia,data/raw/labelled/emopia/Q3_x4B0raxVODA_3.mid,emopia_Q3_x4B0raxVODA_3.npz
-Q3_VrWAZLRdQO8_1,sad,emopia,data/raw/labelled/emopia/Q3_VrWAZLRdQO8_1.mid,emopia_Q3_VrWAZLRdQO8_1.npz
-Q3_uj3Gif77SYM_0,sad,emopia,data/raw/labelled/emopia/Q3_uj3Gif77SYM_0.mid,emopia_Q3_uj3Gif77SYM_0.npz
-Q1_94ROf10d1iA_3,happy,emopia,data/raw/labelled/emopia/Q1_94ROf10d1iA_3.mid,emopia_Q1_94ROf10d1iA_3.npz
-Q3_7JIdJLkJ0S4_2,sad,emopia,data/raw/labelled/emopia/Q3_7JIdJLkJ0S4_2.mid,emopia_Q3_7JIdJLkJ0S4_2.npz
-Q3_wxXpvnmq_-E_2,sad,emopia,data/raw/labelled/emopia/Q3_wxXpvnmq_-E_2.mid,emopia_Q3_wxXpvnmq_-E_2.npz
-Q3_wfXSdMsd4q8_4,sad,emopia,data/raw/labelled/emopia/Q3_wfXSdMsd4q8_4.mid,emopia_Q3_wfXSdMsd4q8_4.npz
-Q3_wxXpvnmq_-E_0,sad,emopia,data/raw/labelled/emopia/Q3_wxXpvnmq_-E_0.mid,emopia_Q3_wxXpvnmq_-E_0.npz
-labelled/phrases/Banjo-Kazooie_N64_Banjo-Kazooie_Boggys Igloo Happy_0.mid,happy,vgmidi,data/raw/labelled/vgmidi/Banjo-Kazooie_N64_Banjo-Kazooie_Boggys Igloo Happy.mid,vgmidi_Banjo-Kazooie_N64_Banjo-Kazooie_Boggys_Igloo_Happy.npz
-Q1_k4dxAlI5N-k_0,happy,emopia,data/raw/labelled/emopia/Q1_k4dxAlI5N-k_0.mid,emopia_Q1_k4dxAlI5N-k_0.npz
-labelled/phrases/Final Fantasy_PS1_Final Fantasy VII_Continue_0.mid,calm,vgmidi,data/raw/labelled/vgmidi/Final Fantasy_PS1_Final Fantasy VII_Continue.mid,vgmidi_Final_Fantasy_PS1_Final_Fantasy_VII_Continue.npz
-Q2_DYBBfpEx-JI_2,angry,emopia,data/raw/labelled/emopia/Q2_DYBBfpEx-JI_2.mid,emopia_Q2_DYBBfpEx-JI_2.npz
-Q4_ltNK_MY1HkM_0,calm,emopia,data/raw/labelled/emopia/Q4_ltNK_MY1HkM_0.mid,emopia_Q4_ltNK_MY1HkM_0.npz
-Q3_bbU31JLtlug_0,sad,emopia,data/raw/labelled/emopia/Q3_bbU31JLtlug_0.mid,emopia_Q3_bbU31JLtlug_0.npz
-Q3_IH2KrGjKXw0_2,sad,emopia,data/raw/labelled/emopia/Q3_IH2KrGjKXw0_2.mid,emopia_Q3_IH2KrGjKXw0_2.npz
-Q3_epMOLn5Axw0_0,sad,emopia,data/raw/labelled/emopia/Q3_epMOLn5Axw0_0.mid,emopia_Q3_epMOLn5Axw0_0.npz
-Q1_Fc1qk52SaKY_0,happy,emopia,data/raw/labelled/emopia/Q1_Fc1qk52SaKY_0.mid,emopia_Q1_Fc1qk52SaKY_0.npz
-Q2_61EA0xRX8gE_0,angry,emopia,data/raw/labelled/emopia/Q2_61EA0xRX8gE_0.mid,emopia_Q2_61EA0xRX8gE_0.npz
-Q4_Tc684nD8CEA_1,calm,emopia,data/raw/labelled/emopia/Q4_Tc684nD8CEA_1.mid,emopia_Q4_Tc684nD8CEA_1.npz
-labelled/phrases/The Legend of Zelda_N64_The Legend of Zelda Ocarina of Time_Windmill Hut_0.mid,calm,vgmidi,data/raw/labelled/vgmidi/The Legend of Zelda_N64_The Legend of Zelda Ocarina of Time_Windmill Hut.mid,vgmidi_The_Legend_of_Zelda_N64_The_Legend_of_Zelda_Ocarina_of_Time_Windmill_Hut.npz
-labelled/phrases/Star Fox_SNES_Star Fox_Venom_0.mid,happy,vgmidi,data/raw/labelled/vgmidi/Star Fox_SNES_Star Fox_Venom.mid,vgmidi_Star_Fox_SNES_Star_Fox_Venom.npz
-Q4_Ie5koh4qvJc_17,calm,emopia,data/raw/labelled/emopia/Q4_Ie5koh4qvJc_17.mid,emopia_Q4_Ie5koh4qvJc_17.npz
-Q2_0qYNvMCEwaw_0,angry,emopia,data/raw/labelled/emopia/Q2_0qYNvMCEwaw_0.mid,emopia_Q2_0qYNvMCEwaw_0.npz
-labelled/phrases/Other_PC_World of Warcraft Warlords of Draenor_Song of Elune_0.mid,calm,vgmidi,data/raw/labelled/vgmidi/Other_PC_World of Warcraft Warlords of Draenor_Song of Elune.mid,vgmidi_Other_PC_World_of_Warcraft_Warlords_of_Draenor_Song_of_Elune.npz
-Q3_yZGBxiNPu3k_2,sad,emopia,data/raw/labelled/emopia/Q3_yZGBxiNPu3k_2.mid,emopia_Q3_yZGBxiNPu3k_2.npz
-Q4_IgpNyJVWcBo_0,calm,emopia,data/raw/labelled/emopia/Q4_IgpNyJVWcBo_0.mid,emopia_Q4_IgpNyJVWcBo_0.npz
-labelled/phrases/Other_PC_Aion Tower of Eternity_Death Waltz_0.mid,sad,vgmidi,data/raw/labelled/vgmidi/Other_PC_Aion Tower of Eternity_Death Waltz.mid,vgmidi_Other_PC_Aion_Tower_of_Eternity_Death_Waltz.npz
-Q4_pRuwHN-lI44_1,calm,emopia,data/raw/labelled/emopia/Q4_pRuwHN-lI44_1.mid,emopia_Q4_pRuwHN-lI44_1.npz
-Q2_cFWdWpyvwag_0,angry,emopia,data/raw/labelled/emopia/Q2_cFWdWpyvwag_0.mid,emopia_Q2_cFWdWpyvwag_0.npz
-labelled/phrases/Mana_SNES_Secret of Mana_The Holy Intruder_0.mid,happy,vgmidi,data/raw/labelled/vgmidi/Mana_SNES_Secret of Mana_The Holy Intruder.mid,vgmidi_Mana_SNES_Secret_of_Mana_The_Holy_Intruder.npz
-Q1_94ROf10d1iA_2,happy,emopia,data/raw/labelled/emopia/Q1_94ROf10d1iA_2.mid,emopia_Q1_94ROf10d1iA_2.npz
-Q4_B3aRl8iTEKw_1,calm,emopia,data/raw/labelled/emopia/Q4_B3aRl8iTEKw_1.mid,emopia_Q4_B3aRl8iTEKw_1.npz
-Q4_Ie5koh4qvJc_32,calm,emopia,data/raw/labelled/emopia/Q4_Ie5koh4qvJc_32.mid,emopia_Q4_Ie5koh4qvJc_32.npz
-Q1_zmZHNy9T8Pg_2,happy,emopia,data/raw/labelled/emopia/Q1_zmZHNy9T8Pg_2.mid,emopia_Q1_zmZHNy9T8Pg_2.npz
-Q1_doM_LWo-74A_2,happy,emopia,data/raw/labelled/emopia/Q1_doM_LWo-74A_2.mid,emopia_Q1_doM_LWo-74A_2.npz
-Q4_-_FjI4bT2Wo_2,calm,emopia,data/raw/labelled/emopia/Q4_-_FjI4bT2Wo_2.mid,emopia_Q4_-_FjI4bT2Wo_2.npz
-Q2_-jJVb0xvbdg_0,angry,emopia,data/raw/labelled/emopia/Q2_-jJVb0xvbdg_0.mid,emopia_Q2_-jJVb0xvbdg_0.npz
-Q2_EtAbPc20mn8_0,angry,emopia,data/raw/labelled/emopia/Q2_EtAbPc20mn8_0.mid,emopia_Q2_EtAbPc20mn8_0.npz
-Q1_5NW0zDu6IYM_2,happy,emopia,data/raw/labelled/emopia/Q1_5NW0zDu6IYM_2.mid,emopia_Q1_5NW0zDu6IYM_2.npz
-Q1_osxmQReE_2o_0,happy,emopia,data/raw/labelled/emopia/Q1_osxmQReE_2o_0.mid,emopia_Q1_osxmQReE_2o_0.npz
-Q1_zHwJG8Rrx6c_3,happy,emopia,data/raw/labelled/emopia/Q1_zHwJG8Rrx6c_3.mid,emopia_Q1_zHwJG8Rrx6c_3.npz
-Q1_HY9vPoHbgaI_1,happy,emopia,data/raw/labelled/emopia/Q1_HY9vPoHbgaI_1.mid,emopia_Q1_HY9vPoHbgaI_1.npz
-Q1_yFw_kO7DF-Y_1,happy,emopia,data/raw/labelled/emopia/Q1_yFw_kO7DF-Y_1.mid,emopia_Q1_yFw_kO7DF-Y_1.npz
-Q1_JT1XJnVmABo_4,happy,emopia,data/raw/labelled/emopia/Q1_JT1XJnVmABo_4.mid,emopia_Q1_JT1XJnVmABo_4.npz
-Q2_yhIncZ_Ue4E_2,angry,emopia,data/raw/labelled/emopia/Q2_yhIncZ_Ue4E_2.mid,emopia_Q2_yhIncZ_Ue4E_2.npz
-Q4_DvIH5yUrboc_1,calm,emopia,data/raw/labelled/emopia/Q4_DvIH5yUrboc_1.mid,emopia_Q4_DvIH5yUrboc_1.npz
-Q1_aYe-2Glruu4_4,happy,emopia,data/raw/labelled/emopia/Q1_aYe-2Glruu4_4.mid,emopia_Q1_aYe-2Glruu4_4.npz
-Q4_k6aLLVX1D7Y_2,calm,emopia,data/raw/labelled/emopia/Q4_k6aLLVX1D7Y_2.mid,emopia_Q4_k6aLLVX1D7Y_2.npz
-Q3_ZvD8QSO7NPw_1,sad,emopia,data/raw/labelled/emopia/Q3_ZvD8QSO7NPw_1.mid,emopia_Q3_ZvD8QSO7NPw_1.npz
-Q3_OO7zYVeK814_2,sad,emopia,data/raw/labelled/emopia/Q3_OO7zYVeK814_2.mid,emopia_Q3_OO7zYVeK814_2.npz
-Q2_snfsc7pEzlk_0,angry,emopia,data/raw/labelled/emopia/Q2_snfsc7pEzlk_0.mid,emopia_Q2_snfsc7pEzlk_0.npz
-Q3_bfopzItCYrE_0,sad,emopia,data/raw/labelled/emopia/Q3_bfopzItCYrE_0.mid,emopia_Q3_bfopzItCYrE_0.npz
-Q1_J6X3rVU1H-c_1,happy,emopia,data/raw/labelled/emopia/Q1_J6X3rVU1H-c_1.mid,emopia_Q1_J6X3rVU1H-c_1.npz
-Q1_FfwKrQyQ7WU_1,happy,emopia,data/raw/labelled/emopia/Q1_FfwKrQyQ7WU_1.mid,emopia_Q1_FfwKrQyQ7WU_1.npz
-Q1_ANZf1QXsNrY_2,happy,emopia,data/raw/labelled/emopia/Q1_ANZf1QXsNrY_2.mid,emopia_Q1_ANZf1QXsNrY_2.npz
-Q1_Jn9r0avp0fY_0,happy,emopia,data/raw/labelled/emopia/Q1_Jn9r0avp0fY_0.mid,emopia_Q1_Jn9r0avp0fY_0.npz
-Q1_xrhWli_R98g_1,happy,emopia,data/raw/labelled/emopia/Q1_xrhWli_R98g_1.mid,emopia_Q1_xrhWli_R98g_1.npz
-Q1_pNwQ9Tu_bCs_0,happy,emopia,data/raw/labelled/emopia/Q1_pNwQ9Tu_bCs_0.mid,emopia_Q1_pNwQ9Tu_bCs_0.npz
-Q2_yrvKReuwVlY_3,angry,emopia,data/raw/labelled/emopia/Q2_yrvKReuwVlY_3.mid,emopia_Q2_yrvKReuwVlY_3.npz
-Q1_KxlqB3j0zys_1,happy,emopia,data/raw/labelled/emopia/Q1_KxlqB3j0zys_1.mid,emopia_Q1_KxlqB3j0zys_1.npz
-Q4_qRceKZtwRWA_0,calm,emopia,data/raw/labelled/emopia/Q4_qRceKZtwRWA_0.mid,emopia_Q4_qRceKZtwRWA_0.npz
-Q4_rW1I58_lMEg_3,calm,emopia,data/raw/labelled/emopia/Q4_rW1I58_lMEg_3.mid,emopia_Q4_rW1I58_lMEg_3.npz
-Q4_UaYYMRkHMYc_1,calm,emopia,data/raw/labelled/emopia/Q4_UaYYMRkHMYc_1.mid,emopia_Q4_UaYYMRkHMYc_1.npz
-Q4_rW1I58_lMEg_1,calm,emopia,data/raw/labelled/emopia/Q4_rW1I58_lMEg_1.mid,emopia_Q4_rW1I58_lMEg_1.npz
-Q4_9eMxCs-LXCE_2,calm,emopia,data/raw/labelled/emopia/Q4_9eMxCs-LXCE_2.mid,emopia_Q4_9eMxCs-LXCE_2.npz
-labelled/phrases/Banjo-Kazooie_N64_Banjo-Tooie_End Credits_0.mid,happy,vgmidi,data/raw/labelled/vgmidi/Banjo-Kazooie_N64_Banjo-Tooie_End Credits.mid,vgmidi_Banjo-Kazooie_N64_Banjo-Tooie_End_Credits.npz
-Q1_sZe3IB1OVfw_1,happy,emopia,data/raw/labelled/emopia/Q1_sZe3IB1OVfw_1.mid,emopia_Q1_sZe3IB1OVfw_1.npz
-Q2_z5ewpQwGDNw_2,angry,emopia,data/raw/labelled/emopia/Q2_z5ewpQwGDNw_2.mid,emopia_Q2_z5ewpQwGDNw_2.npz
-Q1_fey-8bOR95E_0,happy,emopia,data/raw/labelled/emopia/Q1_fey-8bOR95E_0.mid,emopia_Q1_fey-8bOR95E_0.npz
-Q2_S7Bo4-NCEDk_2,angry,emopia,data/raw/labelled/emopia/Q2_S7Bo4-NCEDk_2.mid,emopia_Q2_S7Bo4-NCEDk_2.npz
-Q1_GY3f6ckBVkA_0,happy,emopia,data/raw/labelled/emopia/Q1_GY3f6ckBVkA_0.mid,emopia_Q1_GY3f6ckBVkA_0.npz
-labelled/phrases/Super Mario_SNES_Super Mario World_Ending Theme_0.mid,calm,vgmidi,data/raw/labelled/vgmidi/Super Mario_SNES_Super Mario World_Ending Theme.mid,vgmidi_Super_Mario_SNES_Super_Mario_World_Ending_Theme.npz
-Q4_jO2zX6Ul8GM_2,calm,emopia,data/raw/labelled/emopia/Q4_jO2zX6Ul8GM_2.mid,emopia_Q4_jO2zX6Ul8GM_2.npz
-Q2_ZdyiXIlKe_Y_1,angry,emopia,data/raw/labelled/emopia/Q2_ZdyiXIlKe_Y_1.mid,emopia_Q2_ZdyiXIlKe_Y_1.npz
-Q4_mGYKWCVnMwQ_0,calm,emopia,data/raw/labelled/emopia/Q4_mGYKWCVnMwQ_0.mid,emopia_Q4_mGYKWCVnMwQ_0.npz
-Q4_nGkpcWNAxDU_0,calm,emopia,data/raw/labelled/emopia/Q4_nGkpcWNAxDU_0.mid,emopia_Q4_nGkpcWNAxDU_0.npz
-Q2_k4lT-sXg3iI_2,angry,emopia,data/raw/labelled/emopia/Q2_k4lT-sXg3iI_2.mid,emopia_Q2_k4lT-sXg3iI_2.npz
-Q4_KxlqB3j0zys_3,calm,emopia,data/raw/labelled/emopia/Q4_KxlqB3j0zys_3.mid,emopia_Q4_KxlqB3j0zys_3.npz
-Q3_tLmXAWfbGqs_0,sad,emopia,data/raw/labelled/emopia/Q3_tLmXAWfbGqs_0.mid,emopia_Q3_tLmXAWfbGqs_0.npz
-Q4_Ie5koh4qvJc_20,calm,emopia,data/raw/labelled/emopia/Q4_Ie5koh4qvJc_20.mid,emopia_Q4_Ie5koh4qvJc_20.npz
-Q3_TonQX8XbvX8_2,sad,emopia,data/raw/labelled/emopia/Q3_TonQX8XbvX8_2.mid,emopia_Q3_TonQX8XbvX8_2.npz
-Q3_x4B0raxVODA_0,sad,emopia,data/raw/labelled/emopia/Q3_x4B0raxVODA_0.mid,emopia_Q3_x4B0raxVODA_0.npz
-Q4_0c2dTJTDUR4_1,calm,emopia,data/raw/labelled/emopia/Q4_0c2dTJTDUR4_1.mid,emopia_Q4_0c2dTJTDUR4_1.npz
-Q1_1Qc15G0ZHIg_2,happy,emopia,data/raw/labelled/emopia/Q1_1Qc15G0ZHIg_2.mid,emopia_Q1_1Qc15G0ZHIg_2.npz
-Q1_6kRPHamGDSo_0,happy,emopia,data/raw/labelled/emopia/Q1_6kRPHamGDSo_0.mid,emopia_Q1_6kRPHamGDSo_0.npz
-Q4_JP3QKZlyQz4_1,calm,emopia,data/raw/labelled/emopia/Q4_JP3QKZlyQz4_1.mid,emopia_Q4_JP3QKZlyQz4_1.npz
-Q3_UE0y8MHqT-g_0,sad,emopia,data/raw/labelled/emopia/Q3_UE0y8MHqT-g_0.mid,emopia_Q3_UE0y8MHqT-g_0.npz
-labelled/phrases/Chrono_SNES_Chrono Trigger_Corridors of Time_0.mid,calm,vgmidi,data/raw/labelled/vgmidi/Chrono_SNES_Chrono Trigger_Corridors of Time.mid,vgmidi_Chrono_SNES_Chrono_Trigger_Corridors_of_Time.npz
-Q4_xgtwQGeB6_0_0,calm,emopia,data/raw/labelled/emopia/Q4_xgtwQGeB6_0_0.mid,emopia_Q4_xgtwQGeB6_0_0.npz
-Q2_f2BXXa7lPuE_3,angry,emopia,data/raw/labelled/emopia/Q2_f2BXXa7lPuE_3.mid,emopia_Q2_f2BXXa7lPuE_3.npz
-Q4_XPLYvpyfKUM_0,calm,emopia,data/raw/labelled/emopia/Q4_XPLYvpyfKUM_0.mid,emopia_Q4_XPLYvpyfKUM_0.npz
-Q4_9v2WSpn4FCw_9,calm,emopia,data/raw/labelled/emopia/Q4_9v2WSpn4FCw_9.mid,emopia_Q4_9v2WSpn4FCw_9.npz
-Q4_J6X3rVU1H-c_0,calm,emopia,data/raw/labelled/emopia/Q4_J6X3rVU1H-c_0.mid,emopia_Q4_J6X3rVU1H-c_0.npz
+file_key,emotion,source,full_path,npz_path
+Q4_V3Y9L4UOcpk_1,calm,emopia,dataset_root/raw/labelled/emopia/Q4_V3Y9L4UOcpk_1.mid,emopia_Q4_V3Y9L4UOcpk_1.npz
+Q3_wqc8iqbDsGM_1,sad,emopia,dataset_root/raw/labelled/emopia/Q3_wqc8iqbDsGM_1.mid,emopia_Q3_wqc8iqbDsGM_1.npz
+Q4_XWk5XUEBXmg_0,calm,emopia,dataset_root/raw/labelled/emopia/Q4_XWk5XUEBXmg_0.mid,emopia_Q4_XWk5XUEBXmg_0.npz
+Q3_JT1XJnVmABo_1,sad,emopia,dataset_root/raw/labelled/emopia/Q3_JT1XJnVmABo_1.mid,emopia_Q3_JT1XJnVmABo_1.npz
+Q2_7n32BtYb4d4_3,angry,emopia,dataset_root/raw/labelled/emopia/Q2_7n32BtYb4d4_3.mid,emopia_Q2_7n32BtYb4d4_3.npz
+Q1_s6-SbDSZzEU_0,happy,emopia,dataset_root/raw/labelled/emopia/Q1_s6-SbDSZzEU_0.mid,emopia_Q1_s6-SbDSZzEU_0.npz
+Q3_x4B0raxVODA_1,sad,emopia,dataset_root/raw/labelled/emopia/Q3_x4B0raxVODA_1.mid,emopia_Q3_x4B0raxVODA_1.npz
+Q4_YAAxPW1GB7w_0,calm,emopia,dataset_root/raw/labelled/emopia/Q4_YAAxPW1GB7w_0.mid,emopia_Q4_YAAxPW1GB7w_0.npz
+labelled/phrases/The Legend of Zelda_N64_The Legend of Zelda Majora's Mask_Alien Invasion_0.mid,angry,vgmidi,dataset_root/raw/labelled/vgmidi/The Legend of Zelda_N64_The Legend of Zelda Majora's Mask_Alien Invasion.mid,vgmidi_The_Legend_of_Zelda_N64_The_Legend_of_Zelda_Majora_s_Mask_Alien_Invasion.npz
+Q2_CxFXrYgdSSI_0,angry,emopia,dataset_root/raw/labelled/emopia/Q2_CxFXrYgdSSI_0.mid,emopia_Q2_CxFXrYgdSSI_0.npz
+Q3_K84TcgjCRt4_2,sad,emopia,dataset_root/raw/labelled/emopia/Q3_K84TcgjCRt4_2.mid,emopia_Q3_K84TcgjCRt4_2.npz
+Q2_7n32BtYb4d4_0,angry,emopia,dataset_root/raw/labelled/emopia/Q2_7n32BtYb4d4_0.mid,emopia_Q2_7n32BtYb4d4_0.npz
+Q2_TcFVq0leii4_1,angry,emopia,dataset_root/raw/labelled/emopia/Q2_TcFVq0leii4_1.mid,emopia_Q2_TcFVq0leii4_1.npz
+Q3_D8Ed5PZXfF4_0,sad,emopia,dataset_root/raw/labelled/emopia/Q3_D8Ed5PZXfF4_0.mid,emopia_Q3_D8Ed5PZXfF4_0.npz
+labelled/phrases/Indiana Jones_PC_Indiana Jones and the Fate of Atlantis_Crossing_0.mid,happy,vgmidi,dataset_root/raw/labelled/vgmidi/Indiana Jones_PC_Indiana Jones and the Fate of Atlantis_Crossing.mid,vgmidi_Indiana_Jones_PC_Indiana_Jones_and_the_Fate_of_Atlantis_Crossing.npz
+Q2_l-4Kce3YxxQ_2,angry,emopia,dataset_root/raw/labelled/emopia/Q2_l-4Kce3YxxQ_2.mid,emopia_Q2_l-4Kce3YxxQ_2.npz
+Q1_RaUSISlnhKw_1,happy,emopia,dataset_root/raw/labelled/emopia/Q1_RaUSISlnhKw_1.mid,emopia_Q1_RaUSISlnhKw_1.npz
+Q4_vpTguZtJAFA_2,calm,emopia,dataset_root/raw/labelled/emopia/Q4_vpTguZtJAFA_2.mid,emopia_Q4_vpTguZtJAFA_2.npz
+Q3_vVTP0DOL_2Q_1,sad,emopia,dataset_root/raw/labelled/emopia/Q3_vVTP0DOL_2Q_1.mid,emopia_Q3_vVTP0DOL_2Q_1.npz
+Q2_S1T3UF1vhSk_1,angry,emopia,dataset_root/raw/labelled/emopia/Q2_S1T3UF1vhSk_1.mid,emopia_Q2_S1T3UF1vhSk_1.npz
+Q4_1fdxsFbnsX4_0,calm,emopia,dataset_root/raw/labelled/emopia/Q4_1fdxsFbnsX4_0.mid,emopia_Q4_1fdxsFbnsX4_0.npz
+labelled/phrases/Other_N64_GoldenEye 007_Statue_0.mid,sad,vgmidi,dataset_root/raw/labelled/vgmidi/Other_N64_GoldenEye 007_Statue.mid,vgmidi_Other_N64_GoldenEye_007_Statue.npz
+Q4_UaYYMRkHMYc_2,calm,emopia,dataset_root/raw/labelled/emopia/Q4_UaYYMRkHMYc_2.mid,emopia_Q4_UaYYMRkHMYc_2.npz
+Q2_UAm0aWvzFI8_1,angry,emopia,dataset_root/raw/labelled/emopia/Q2_UAm0aWvzFI8_1.mid,emopia_Q2_UAm0aWvzFI8_1.npz
+labelled/phrases/Xeno_PS1_Xenogears_Knight of Fire_0.mid,angry,vgmidi,dataset_root/raw/labelled/vgmidi/Xeno_PS1_Xenogears_Knight of Fire.mid,vgmidi_Xeno_PS1_Xenogears_Knight_of_Fire.npz
+Q2_61EA0xRX8gE_1,angry,emopia,dataset_root/raw/labelled/emopia/Q2_61EA0xRX8gE_1.mid,emopia_Q2_61EA0xRX8gE_1.npz
+Q3_QJlnTN7HRwE_3,sad,emopia,dataset_root/raw/labelled/emopia/Q3_QJlnTN7HRwE_3.mid,emopia_Q3_QJlnTN7HRwE_3.npz
+labelled/phrases/Final Fantasy_PS1_Final Fantasy VII_Great Warrior_0.mid,calm,vgmidi,dataset_root/raw/labelled/vgmidi/Final Fantasy_PS1_Final Fantasy VII_Great Warrior.mid,vgmidi_Final_Fantasy_PS1_Final_Fantasy_VII_Great_Warrior.npz
+Q4_Tc684nD8CEA_2,calm,emopia,dataset_root/raw/labelled/emopia/Q4_Tc684nD8CEA_2.mid,emopia_Q4_Tc684nD8CEA_2.npz
+labelled/phrases/Indiana Jones_PC_Indiana Jones and the Last Crusade_The Holy Grail_0.mid,sad,vgmidi,dataset_root/raw/labelled/vgmidi/Indiana Jones_PC_Indiana Jones and the Last Crusade_The Holy Grail.mid,vgmidi_Indiana_Jones_PC_Indiana_Jones_and_the_Last_Crusade_The_Holy_Grail.npz
+Q2_jO2zX6Ul8GM_0,angry,emopia,dataset_root/raw/labelled/emopia/Q2_jO2zX6Ul8GM_0.mid,emopia_Q2_jO2zX6Ul8GM_0.npz
+Q4_XWk5XUEBXmg_1,calm,emopia,dataset_root/raw/labelled/emopia/Q4_XWk5XUEBXmg_1.mid,emopia_Q4_XWk5XUEBXmg_1.npz
+Q1_KxlqB3j0zys_0,happy,emopia,dataset_root/raw/labelled/emopia/Q1_KxlqB3j0zys_0.mid,emopia_Q1_KxlqB3j0zys_0.npz
+Q2_CxFXrYgdSSI_1,angry,emopia,dataset_root/raw/labelled/emopia/Q2_CxFXrYgdSSI_1.mid,emopia_Q2_CxFXrYgdSSI_1.npz
+labelled/phrases/Mana_SNES_Secret of Mana_Tell A Strange Tale_0.mid,happy,vgmidi,dataset_root/raw/labelled/vgmidi/Mana_SNES_Secret of Mana_Tell A Strange Tale.mid,vgmidi_Mana_SNES_Secret_of_Mana_Tell_A_Strange_Tale.npz
+labelled/phrases/Banjo-Kazooie_N64_Banjo-Tooie_Here Comes Trouble_0.mid,angry,vgmidi,dataset_root/raw/labelled/vgmidi/Banjo-Kazooie_N64_Banjo-Tooie_Here Comes Trouble.mid,vgmidi_Banjo-Kazooie_N64_Banjo-Tooie_Here_Comes_Trouble.npz
+Q2_8c7kcmsnf-s_2,angry,emopia,dataset_root/raw/labelled/emopia/Q2_8c7kcmsnf-s_2.mid,emopia_Q2_8c7kcmsnf-s_2.npz
+Q2_ijfxkQPAQdE_1,angry,emopia,dataset_root/raw/labelled/emopia/Q2_ijfxkQPAQdE_1.mid,emopia_Q2_ijfxkQPAQdE_1.npz
+Q3_16OaOpfOPZ0_1,sad,emopia,dataset_root/raw/labelled/emopia/Q3_16OaOpfOPZ0_1.mid,emopia_Q3_16OaOpfOPZ0_1.npz
+Q2_jrVXitpLGMk_0,angry,emopia,dataset_root/raw/labelled/emopia/Q2_jrVXitpLGMk_0.mid,emopia_Q2_jrVXitpLGMk_0.npz
+Q4_biROWEwkDQQ_0,calm,emopia,dataset_root/raw/labelled/emopia/Q4_biROWEwkDQQ_0.mid,emopia_Q4_biROWEwkDQQ_0.npz
+Q2_kKFwiXKlhC8_1,angry,emopia,dataset_root/raw/labelled/emopia/Q2_kKFwiXKlhC8_1.mid,emopia_Q2_kKFwiXKlhC8_1.npz
+labelled/phrases/Chrono_SNES_Chrono Trigger_Ocean Palace_0.mid,angry,vgmidi,dataset_root/raw/labelled/vgmidi/Chrono_SNES_Chrono Trigger_Ocean Palace.mid,vgmidi_Chrono_SNES_Chrono_Trigger_Ocean_Palace.npz
+Q4_pRuwHN-lI44_3,calm,emopia,dataset_root/raw/labelled/emopia/Q4_pRuwHN-lI44_3.mid,emopia_Q4_pRuwHN-lI44_3.npz
+Q1_6kRPHamGDSo_1,happy,emopia,dataset_root/raw/labelled/emopia/Q1_6kRPHamGDSo_1.mid,emopia_Q1_6kRPHamGDSo_1.npz
+Q3_9Xg69XrVaYU_1,sad,emopia,dataset_root/raw/labelled/emopia/Q3_9Xg69XrVaYU_1.mid,emopia_Q3_9Xg69XrVaYU_1.npz
+Q3_QJlnTN7HRwE_1,sad,emopia,dataset_root/raw/labelled/emopia/Q3_QJlnTN7HRwE_1.mid,emopia_Q3_QJlnTN7HRwE_1.npz
+Q4_prUUays30Mg_1,calm,emopia,dataset_root/raw/labelled/emopia/Q4_prUUays30Mg_1.mid,emopia_Q4_prUUays30Mg_1.npz
+labelled/phrases/Banjo-Kazooie_N64_Banjo-Tooie_Witchy World_0.mid,sad,vgmidi,dataset_root/raw/labelled/vgmidi/Banjo-Kazooie_N64_Banjo-Tooie_Witchy World.mid,vgmidi_Banjo-Kazooie_N64_Banjo-Tooie_Witchy_World.npz
+Q1_RaUSISlnhKw_0,happy,emopia,dataset_root/raw/labelled/emopia/Q1_RaUSISlnhKw_0.mid,emopia_Q1_RaUSISlnhKw_0.npz
+Q2_DYBBfpEx-JI_1,angry,emopia,dataset_root/raw/labelled/emopia/Q2_DYBBfpEx-JI_1.mid,emopia_Q2_DYBBfpEx-JI_1.npz
+Q4_bfopzItCYrE_2,calm,emopia,dataset_root/raw/labelled/emopia/Q4_bfopzItCYrE_2.mid,emopia_Q4_bfopzItCYrE_2.npz
+Q4_61EA0xRX8gE_2,calm,emopia,dataset_root/raw/labelled/emopia/Q4_61EA0xRX8gE_2.mid,emopia_Q4_61EA0xRX8gE_2.npz
+labelled/phrases/Final Fantasy_PS1_Final Fantasy VII_Electric de Chocobo_0.mid,happy,vgmidi,dataset_root/raw/labelled/vgmidi/Final Fantasy_PS1_Final Fantasy VII_Electric de Chocobo.mid,vgmidi_Final_Fantasy_PS1_Final_Fantasy_VII_Electric_de_Chocobo.npz
+Q4_Ie5koh4qvJc_21,calm,emopia,dataset_root/raw/labelled/emopia/Q4_Ie5koh4qvJc_21.mid,emopia_Q4_Ie5koh4qvJc_21.npz
+Q4_22S3w4idugs_0,calm,emopia,dataset_root/raw/labelled/emopia/Q4_22S3w4idugs_0.mid,emopia_Q4_22S3w4idugs_0.npz
+Q4_Xf2fox7zhCQ_2,calm,emopia,dataset_root/raw/labelled/emopia/Q4_Xf2fox7zhCQ_2.mid,emopia_Q4_Xf2fox7zhCQ_2.npz
+Q2_61EA0xRX8gE_5,angry,emopia,dataset_root/raw/labelled/emopia/Q2_61EA0xRX8gE_5.mid,emopia_Q2_61EA0xRX8gE_5.npz
+Q3_xYZ8n8ULaNo_0,sad,emopia,dataset_root/raw/labelled/emopia/Q3_xYZ8n8ULaNo_0.mid,emopia_Q3_xYZ8n8ULaNo_0.npz
+Q3_By3JCii1k3w_1,sad,emopia,dataset_root/raw/labelled/emopia/Q3_By3JCii1k3w_1.mid,emopia_Q3_By3JCii1k3w_1.npz
+Q1_94ROf10d1iA_1,happy,emopia,dataset_root/raw/labelled/emopia/Q1_94ROf10d1iA_1.mid,emopia_Q1_94ROf10d1iA_1.npz
+Q2_8c7kcmsnf-s_1,angry,emopia,dataset_root/raw/labelled/emopia/Q2_8c7kcmsnf-s_1.mid,emopia_Q2_8c7kcmsnf-s_1.npz
+Q3_nBao46YGZDg_0,sad,emopia,dataset_root/raw/labelled/emopia/Q3_nBao46YGZDg_0.mid,emopia_Q3_nBao46YGZDg_0.npz
+Q1_vv6nrZ2myXw_3,happy,emopia,dataset_root/raw/labelled/emopia/Q1_vv6nrZ2myXw_3.mid,emopia_Q1_vv6nrZ2myXw_3.npz
+labelled/phrases/Banjo-Kazooie_N64_Banjo-Tooie_Cauldron Keep_0.mid,angry,vgmidi,dataset_root/raw/labelled/vgmidi/Banjo-Kazooie_N64_Banjo-Tooie_Cauldron Keep.mid,vgmidi_Banjo-Kazooie_N64_Banjo-Tooie_Cauldron_Keep.npz
+Q4_Cir1kZyB7QM_1,calm,emopia,dataset_root/raw/labelled/emopia/Q4_Cir1kZyB7QM_1.mid,emopia_Q4_Cir1kZyB7QM_1.npz
+Q4_ADJ_PDauy-g_1,calm,emopia,dataset_root/raw/labelled/emopia/Q4_ADJ_PDauy-g_1.mid,emopia_Q4_ADJ_PDauy-g_1.npz
+Q3_ldCQ6N9G6Mk_3,sad,emopia,dataset_root/raw/labelled/emopia/Q3_ldCQ6N9G6Mk_3.mid,emopia_Q3_ldCQ6N9G6Mk_3.npz
+Q4_Tc684nD8CEA_3,calm,emopia,dataset_root/raw/labelled/emopia/Q4_Tc684nD8CEA_3.mid,emopia_Q4_Tc684nD8CEA_3.npz
+labelled/phrases/Other_PC_Warcraft III Reign of Chaos_Blackrock and Roll_0.mid,angry,vgmidi,dataset_root/raw/labelled/vgmidi/Other_PC_Warcraft III Reign of Chaos_Blackrock and Roll.mid,vgmidi_Other_PC_Warcraft_III_Reign_of_Chaos_Blackrock_and_Roll.npz
+Q1_POaIGvLsp5M_1,happy,emopia,dataset_root/raw/labelled/emopia/Q1_POaIGvLsp5M_1.mid,emopia_Q1_POaIGvLsp5M_1.npz
+Q1_94ROf10d1iA_0,happy,emopia,dataset_root/raw/labelled/emopia/Q1_94ROf10d1iA_0.mid,emopia_Q1_94ROf10d1iA_0.npz
+Q4_oTi57hZfArE_2,calm,emopia,dataset_root/raw/labelled/emopia/Q4_oTi57hZfArE_2.mid,emopia_Q4_oTi57hZfArE_2.npz
+Q1__8v0MFBZoco_1,happy,emopia,dataset_root/raw/labelled/emopia/Q1__8v0MFBZoco_1.mid,emopia_Q1__8v0MFBZoco_1.npz
+Q2_o20YCzej5_s_0,angry,emopia,dataset_root/raw/labelled/emopia/Q2_o20YCzej5_s_0.mid,emopia_Q2_o20YCzej5_s_0.npz
+Q4_Tc684nD8CEA_4,calm,emopia,dataset_root/raw/labelled/emopia/Q4_Tc684nD8CEA_4.mid,emopia_Q4_Tc684nD8CEA_4.npz
+Q2_8c7kcmsnf-s_0,angry,emopia,dataset_root/raw/labelled/emopia/Q2_8c7kcmsnf-s_0.mid,emopia_Q2_8c7kcmsnf-s_0.npz
+Q4_6kRPHamGDSo_2,calm,emopia,dataset_root/raw/labelled/emopia/Q4_6kRPHamGDSo_2.mid,emopia_Q4_6kRPHamGDSo_2.npz
+Q3_yZGBxiNPu3k_1,sad,emopia,dataset_root/raw/labelled/emopia/Q3_yZGBxiNPu3k_1.mid,emopia_Q3_yZGBxiNPu3k_1.npz
+Q2_0v2N1ROvEI0_0,angry,emopia,dataset_root/raw/labelled/emopia/Q2_0v2N1ROvEI0_0.mid,emopia_Q2_0v2N1ROvEI0_0.npz
+Q4_vBHoSz8cJIE_1,calm,emopia,dataset_root/raw/labelled/emopia/Q4_vBHoSz8cJIE_1.mid,emopia_Q4_vBHoSz8cJIE_1.npz
+Q2_fuCxYrru2S4_1,angry,emopia,dataset_root/raw/labelled/emopia/Q2_fuCxYrru2S4_1.mid,emopia_Q2_fuCxYrru2S4_1.npz
+Q1_aYe-2Glruu4_0,happy,emopia,dataset_root/raw/labelled/emopia/Q1_aYe-2Glruu4_0.mid,emopia_Q1_aYe-2Glruu4_0.npz
+Q2_ANZf1QXsNrY_7,angry,emopia,dataset_root/raw/labelled/emopia/Q2_ANZf1QXsNrY_7.mid,emopia_Q2_ANZf1QXsNrY_7.npz
+labelled/phrases/The Legend of Zelda_N64_The Legend of Zelda Ocarina of Time_Temple of Time_0.mid,sad,vgmidi,dataset_root/raw/labelled/vgmidi/The Legend of Zelda_N64_The Legend of Zelda Ocarina of Time_Temple of Time.mid,vgmidi_The_Legend_of_Zelda_N64_The_Legend_of_Zelda_Ocarina_of_Time_Temple_of_Time.npz
+labelled/phrases/Chrono_SNES_Chrono Trigger_Silent Light_0.mid,happy,vgmidi,dataset_root/raw/labelled/vgmidi/Chrono_SNES_Chrono Trigger_Silent Light.mid,vgmidi_Chrono_SNES_Chrono_Trigger_Silent_Light.npz
+Q1_60LLKmpgzRM_0,happy,emopia,dataset_root/raw/labelled/emopia/Q1_60LLKmpgzRM_0.mid,emopia_Q1_60LLKmpgzRM_0.npz
+Q3_fnqb8zqHqdY_2,sad,emopia,dataset_root/raw/labelled/emopia/Q3_fnqb8zqHqdY_2.mid,emopia_Q3_fnqb8zqHqdY_2.npz
+Q1_e838BE_MH6s_3,happy,emopia,dataset_root/raw/labelled/emopia/Q1_e838BE_MH6s_3.mid,emopia_Q1_e838BE_MH6s_3.npz
+Q3_S1T3UF1vhSk_0,sad,emopia,dataset_root/raw/labelled/emopia/Q3_S1T3UF1vhSk_0.mid,emopia_Q3_S1T3UF1vhSk_0.npz
+labelled/phrases/The Legend of Zelda_N64_The Legend of Zelda Ocarina of Time_Kokiri Forest_0.mid,happy,vgmidi,dataset_root/raw/labelled/vgmidi/The Legend of Zelda_N64_The Legend of Zelda Ocarina of Time_Kokiri Forest.mid,vgmidi_The_Legend_of_Zelda_N64_The_Legend_of_Zelda_Ocarina_of_Time_Kokiri_Forest.npz
+labelled/phrases/The Legend of Zelda_N64_The Legend of Zelda Ocarina of Time_Hyrule Castle Courtyard_0.mid,happy,vgmidi,dataset_root/raw/labelled/vgmidi/The Legend of Zelda_N64_The Legend of Zelda Ocarina of Time_Hyrule Castle Courtyard.mid,vgmidi_The_Legend_of_Zelda_N64_The_Legend_of_Zelda_Ocarina_of_Time_Hyrule_Castle_Courtyard.npz
+labelled/phrases/Banjo-Kazooie_N64_Banjo-Tooie_Chilly Willy Chilli Billi_0.mid,angry,vgmidi,dataset_root/raw/labelled/vgmidi/Banjo-Kazooie_N64_Banjo-Tooie_Chilly Willy Chilli Billi.mid,vgmidi_Banjo-Kazooie_N64_Banjo-Tooie_Chilly_Willy_Chilli_Billi.npz
+Q3_wfXSdMsd4q8_2,sad,emopia,dataset_root/raw/labelled/emopia/Q3_wfXSdMsd4q8_2.mid,emopia_Q3_wfXSdMsd4q8_2.npz
+Q3_PLfFWFZflQU_0,sad,emopia,dataset_root/raw/labelled/emopia/Q3_PLfFWFZflQU_0.mid,emopia_Q3_PLfFWFZflQU_0.npz
+Q2__S991V8N-8s_1,angry,emopia,dataset_root/raw/labelled/emopia/Q2__S991V8N-8s_1.mid,emopia_Q2__S991V8N-8s_1.npz
+Q2_JMt4m608s3k_2,angry,emopia,dataset_root/raw/labelled/emopia/Q2_JMt4m608s3k_2.mid,emopia_Q2_JMt4m608s3k_2.npz
+labelled/phrases/Battle of Olympus_NES_Battle of Olympus_Orpheus Journey Arranged_0.mid,calm,vgmidi,dataset_root/raw/labelled/vgmidi/Battle of Olympus_NES_Battle of Olympus_Orpheus Journey Arranged.mid,vgmidi_Battle_of_Olympus_NES_Battle_of_Olympus_Orpheus_Journey_Arranged.npz
+Q1_Xsn9zT-05ns_0,happy,emopia,dataset_root/raw/labelled/emopia/Q1_Xsn9zT-05ns_0.mid,emopia_Q1_Xsn9zT-05ns_0.npz
+Q3_x4B0raxVODA_3,sad,emopia,dataset_root/raw/labelled/emopia/Q3_x4B0raxVODA_3.mid,emopia_Q3_x4B0raxVODA_3.npz
+Q3_VrWAZLRdQO8_1,sad,emopia,dataset_root/raw/labelled/emopia/Q3_VrWAZLRdQO8_1.mid,emopia_Q3_VrWAZLRdQO8_1.npz
+Q3_uj3Gif77SYM_0,sad,emopia,dataset_root/raw/labelled/emopia/Q3_uj3Gif77SYM_0.mid,emopia_Q3_uj3Gif77SYM_0.npz
+Q1_94ROf10d1iA_3,happy,emopia,dataset_root/raw/labelled/emopia/Q1_94ROf10d1iA_3.mid,emopia_Q1_94ROf10d1iA_3.npz
+Q3_7JIdJLkJ0S4_2,sad,emopia,dataset_root/raw/labelled/emopia/Q3_7JIdJLkJ0S4_2.mid,emopia_Q3_7JIdJLkJ0S4_2.npz
+Q3_wxXpvnmq_-E_2,sad,emopia,dataset_root/raw/labelled/emopia/Q3_wxXpvnmq_-E_2.mid,emopia_Q3_wxXpvnmq_-E_2.npz
+Q3_wfXSdMsd4q8_4,sad,emopia,dataset_root/raw/labelled/emopia/Q3_wfXSdMsd4q8_4.mid,emopia_Q3_wfXSdMsd4q8_4.npz
+Q3_wxXpvnmq_-E_0,sad,emopia,dataset_root/raw/labelled/emopia/Q3_wxXpvnmq_-E_0.mid,emopia_Q3_wxXpvnmq_-E_0.npz
+labelled/phrases/Banjo-Kazooie_N64_Banjo-Kazooie_Boggys Igloo Happy_0.mid,happy,vgmidi,dataset_root/raw/labelled/vgmidi/Banjo-Kazooie_N64_Banjo-Kazooie_Boggys Igloo Happy.mid,vgmidi_Banjo-Kazooie_N64_Banjo-Kazooie_Boggys_Igloo_Happy.npz
+Q1_k4dxAlI5N-k_0,happy,emopia,dataset_root/raw/labelled/emopia/Q1_k4dxAlI5N-k_0.mid,emopia_Q1_k4dxAlI5N-k_0.npz
+labelled/phrases/Final Fantasy_PS1_Final Fantasy VII_Continue_0.mid,calm,vgmidi,dataset_root/raw/labelled/vgmidi/Final Fantasy_PS1_Final Fantasy VII_Continue.mid,vgmidi_Final_Fantasy_PS1_Final_Fantasy_VII_Continue.npz
+Q2_DYBBfpEx-JI_2,angry,emopia,dataset_root/raw/labelled/emopia/Q2_DYBBfpEx-JI_2.mid,emopia_Q2_DYBBfpEx-JI_2.npz
+Q4_ltNK_MY1HkM_0,calm,emopia,dataset_root/raw/labelled/emopia/Q4_ltNK_MY1HkM_0.mid,emopia_Q4_ltNK_MY1HkM_0.npz
+Q3_bbU31JLtlug_0,sad,emopia,dataset_root/raw/labelled/emopia/Q3_bbU31JLtlug_0.mid,emopia_Q3_bbU31JLtlug_0.npz
+Q3_IH2KrGjKXw0_2,sad,emopia,dataset_root/raw/labelled/emopia/Q3_IH2KrGjKXw0_2.mid,emopia_Q3_IH2KrGjKXw0_2.npz
+Q3_epMOLn5Axw0_0,sad,emopia,dataset_root/raw/labelled/emopia/Q3_epMOLn5Axw0_0.mid,emopia_Q3_epMOLn5Axw0_0.npz
+Q1_Fc1qk52SaKY_0,happy,emopia,dataset_root/raw/labelled/emopia/Q1_Fc1qk52SaKY_0.mid,emopia_Q1_Fc1qk52SaKY_0.npz
+Q2_61EA0xRX8gE_0,angry,emopia,dataset_root/raw/labelled/emopia/Q2_61EA0xRX8gE_0.mid,emopia_Q2_61EA0xRX8gE_0.npz
+Q4_Tc684nD8CEA_1,calm,emopia,dataset_root/raw/labelled/emopia/Q4_Tc684nD8CEA_1.mid,emopia_Q4_Tc684nD8CEA_1.npz
+labelled/phrases/The Legend of Zelda_N64_The Legend of Zelda Ocarina of Time_Windmill Hut_0.mid,calm,vgmidi,dataset_root/raw/labelled/vgmidi/The Legend of Zelda_N64_The Legend of Zelda Ocarina of Time_Windmill Hut.mid,vgmidi_The_Legend_of_Zelda_N64_The_Legend_of_Zelda_Ocarina_of_Time_Windmill_Hut.npz
+labelled/phrases/Star Fox_SNES_Star Fox_Venom_0.mid,happy,vgmidi,dataset_root/raw/labelled/vgmidi/Star Fox_SNES_Star Fox_Venom.mid,vgmidi_Star_Fox_SNES_Star_Fox_Venom.npz
+Q4_Ie5koh4qvJc_17,calm,emopia,dataset_root/raw/labelled/emopia/Q4_Ie5koh4qvJc_17.mid,emopia_Q4_Ie5koh4qvJc_17.npz
+Q2_0qYNvMCEwaw_0,angry,emopia,dataset_root/raw/labelled/emopia/Q2_0qYNvMCEwaw_0.mid,emopia_Q2_0qYNvMCEwaw_0.npz
+labelled/phrases/Other_PC_World of Warcraft Warlords of Draenor_Song of Elune_0.mid,calm,vgmidi,dataset_root/raw/labelled/vgmidi/Other_PC_World of Warcraft Warlords of Draenor_Song of Elune.mid,vgmidi_Other_PC_World_of_Warcraft_Warlords_of_Draenor_Song_of_Elune.npz
+Q3_yZGBxiNPu3k_2,sad,emopia,dataset_root/raw/labelled/emopia/Q3_yZGBxiNPu3k_2.mid,emopia_Q3_yZGBxiNPu3k_2.npz
+Q4_IgpNyJVWcBo_0,calm,emopia,dataset_root/raw/labelled/emopia/Q4_IgpNyJVWcBo_0.mid,emopia_Q4_IgpNyJVWcBo_0.npz
+labelled/phrases/Other_PC_Aion Tower of Eternity_Death Waltz_0.mid,sad,vgmidi,dataset_root/raw/labelled/vgmidi/Other_PC_Aion Tower of Eternity_Death Waltz.mid,vgmidi_Other_PC_Aion_Tower_of_Eternity_Death_Waltz.npz
+Q4_pRuwHN-lI44_1,calm,emopia,dataset_root/raw/labelled/emopia/Q4_pRuwHN-lI44_1.mid,emopia_Q4_pRuwHN-lI44_1.npz
+Q2_cFWdWpyvwag_0,angry,emopia,dataset_root/raw/labelled/emopia/Q2_cFWdWpyvwag_0.mid,emopia_Q2_cFWdWpyvwag_0.npz
+labelled/phrases/Mana_SNES_Secret of Mana_The Holy Intruder_0.mid,happy,vgmidi,dataset_root/raw/labelled/vgmidi/Mana_SNES_Secret of Mana_The Holy Intruder.mid,vgmidi_Mana_SNES_Secret_of_Mana_The_Holy_Intruder.npz
+Q1_94ROf10d1iA_2,happy,emopia,dataset_root/raw/labelled/emopia/Q1_94ROf10d1iA_2.mid,emopia_Q1_94ROf10d1iA_2.npz
+Q4_B3aRl8iTEKw_1,calm,emopia,dataset_root/raw/labelled/emopia/Q4_B3aRl8iTEKw_1.mid,emopia_Q4_B3aRl8iTEKw_1.npz
+Q4_Ie5koh4qvJc_32,calm,emopia,dataset_root/raw/labelled/emopia/Q4_Ie5koh4qvJc_32.mid,emopia_Q4_Ie5koh4qvJc_32.npz
+Q1_zmZHNy9T8Pg_2,happy,emopia,dataset_root/raw/labelled/emopia/Q1_zmZHNy9T8Pg_2.mid,emopia_Q1_zmZHNy9T8Pg_2.npz
+Q1_doM_LWo-74A_2,happy,emopia,dataset_root/raw/labelled/emopia/Q1_doM_LWo-74A_2.mid,emopia_Q1_doM_LWo-74A_2.npz
+Q4_-_FjI4bT2Wo_2,calm,emopia,dataset_root/raw/labelled/emopia/Q4_-_FjI4bT2Wo_2.mid,emopia_Q4_-_FjI4bT2Wo_2.npz
+Q2_-jJVb0xvbdg_0,angry,emopia,dataset_root/raw/labelled/emopia/Q2_-jJVb0xvbdg_0.mid,emopia_Q2_-jJVb0xvbdg_0.npz
+Q2_EtAbPc20mn8_0,angry,emopia,dataset_root/raw/labelled/emopia/Q2_EtAbPc20mn8_0.mid,emopia_Q2_EtAbPc20mn8_0.npz
+Q1_5NW0zDu6IYM_2,happy,emopia,dataset_root/raw/labelled/emopia/Q1_5NW0zDu6IYM_2.mid,emopia_Q1_5NW0zDu6IYM_2.npz
+Q1_osxmQReE_2o_0,happy,emopia,dataset_root/raw/labelled/emopia/Q1_osxmQReE_2o_0.mid,emopia_Q1_osxmQReE_2o_0.npz
+Q1_zHwJG8Rrx6c_3,happy,emopia,dataset_root/raw/labelled/emopia/Q1_zHwJG8Rrx6c_3.mid,emopia_Q1_zHwJG8Rrx6c_3.npz
+Q1_HY9vPoHbgaI_1,happy,emopia,dataset_root/raw/labelled/emopia/Q1_HY9vPoHbgaI_1.mid,emopia_Q1_HY9vPoHbgaI_1.npz
+Q1_yFw_kO7DF-Y_1,happy,emopia,dataset_root/raw/labelled/emopia/Q1_yFw_kO7DF-Y_1.mid,emopia_Q1_yFw_kO7DF-Y_1.npz
+Q1_JT1XJnVmABo_4,happy,emopia,dataset_root/raw/labelled/emopia/Q1_JT1XJnVmABo_4.mid,emopia_Q1_JT1XJnVmABo_4.npz
+Q2_yhIncZ_Ue4E_2,angry,emopia,dataset_root/raw/labelled/emopia/Q2_yhIncZ_Ue4E_2.mid,emopia_Q2_yhIncZ_Ue4E_2.npz
+Q4_DvIH5yUrboc_1,calm,emopia,dataset_root/raw/labelled/emopia/Q4_DvIH5yUrboc_1.mid,emopia_Q4_DvIH5yUrboc_1.npz
+Q1_aYe-2Glruu4_4,happy,emopia,dataset_root/raw/labelled/emopia/Q1_aYe-2Glruu4_4.mid,emopia_Q1_aYe-2Glruu4_4.npz
+Q4_k6aLLVX1D7Y_2,calm,emopia,dataset_root/raw/labelled/emopia/Q4_k6aLLVX1D7Y_2.mid,emopia_Q4_k6aLLVX1D7Y_2.npz
+Q3_ZvD8QSO7NPw_1,sad,emopia,dataset_root/raw/labelled/emopia/Q3_ZvD8QSO7NPw_1.mid,emopia_Q3_ZvD8QSO7NPw_1.npz
+Q3_OO7zYVeK814_2,sad,emopia,dataset_root/raw/labelled/emopia/Q3_OO7zYVeK814_2.mid,emopia_Q3_OO7zYVeK814_2.npz
+Q2_snfsc7pEzlk_0,angry,emopia,dataset_root/raw/labelled/emopia/Q2_snfsc7pEzlk_0.mid,emopia_Q2_snfsc7pEzlk_0.npz
+Q3_bfopzItCYrE_0,sad,emopia,dataset_root/raw/labelled/emopia/Q3_bfopzItCYrE_0.mid,emopia_Q3_bfopzItCYrE_0.npz
+Q1_J6X3rVU1H-c_1,happy,emopia,dataset_root/raw/labelled/emopia/Q1_J6X3rVU1H-c_1.mid,emopia_Q1_J6X3rVU1H-c_1.npz
+Q1_FfwKrQyQ7WU_1,happy,emopia,dataset_root/raw/labelled/emopia/Q1_FfwKrQyQ7WU_1.mid,emopia_Q1_FfwKrQyQ7WU_1.npz
+Q1_ANZf1QXsNrY_2,happy,emopia,dataset_root/raw/labelled/emopia/Q1_ANZf1QXsNrY_2.mid,emopia_Q1_ANZf1QXsNrY_2.npz
+Q1_Jn9r0avp0fY_0,happy,emopia,dataset_root/raw/labelled/emopia/Q1_Jn9r0avp0fY_0.mid,emopia_Q1_Jn9r0avp0fY_0.npz
+Q1_xrhWli_R98g_1,happy,emopia,dataset_root/raw/labelled/emopia/Q1_xrhWli_R98g_1.mid,emopia_Q1_xrhWli_R98g_1.npz
+Q1_pNwQ9Tu_bCs_0,happy,emopia,dataset_root/raw/labelled/emopia/Q1_pNwQ9Tu_bCs_0.mid,emopia_Q1_pNwQ9Tu_bCs_0.npz
+Q2_yrvKReuwVlY_3,angry,emopia,dataset_root/raw/labelled/emopia/Q2_yrvKReuwVlY_3.mid,emopia_Q2_yrvKReuwVlY_3.npz
+Q1_KxlqB3j0zys_1,happy,emopia,dataset_root/raw/labelled/emopia/Q1_KxlqB3j0zys_1.mid,emopia_Q1_KxlqB3j0zys_1.npz
+Q4_qRceKZtwRWA_0,calm,emopia,dataset_root/raw/labelled/emopia/Q4_qRceKZtwRWA_0.mid,emopia_Q4_qRceKZtwRWA_0.npz
+Q4_rW1I58_lMEg_3,calm,emopia,dataset_root/raw/labelled/emopia/Q4_rW1I58_lMEg_3.mid,emopia_Q4_rW1I58_lMEg_3.npz
+Q4_UaYYMRkHMYc_1,calm,emopia,dataset_root/raw/labelled/emopia/Q4_UaYYMRkHMYc_1.mid,emopia_Q4_UaYYMRkHMYc_1.npz
+Q4_rW1I58_lMEg_1,calm,emopia,dataset_root/raw/labelled/emopia/Q4_rW1I58_lMEg_1.mid,emopia_Q4_rW1I58_lMEg_1.npz
+Q4_9eMxCs-LXCE_2,calm,emopia,dataset_root/raw/labelled/emopia/Q4_9eMxCs-LXCE_2.mid,emopia_Q4_9eMxCs-LXCE_2.npz
+labelled/phrases/Banjo-Kazooie_N64_Banjo-Tooie_End Credits_0.mid,happy,vgmidi,dataset_root/raw/labelled/vgmidi/Banjo-Kazooie_N64_Banjo-Tooie_End Credits.mid,vgmidi_Banjo-Kazooie_N64_Banjo-Tooie_End_Credits.npz
+Q1_sZe3IB1OVfw_1,happy,emopia,dataset_root/raw/labelled/emopia/Q1_sZe3IB1OVfw_1.mid,emopia_Q1_sZe3IB1OVfw_1.npz
+Q2_z5ewpQwGDNw_2,angry,emopia,dataset_root/raw/labelled/emopia/Q2_z5ewpQwGDNw_2.mid,emopia_Q2_z5ewpQwGDNw_2.npz
+Q1_fey-8bOR95E_0,happy,emopia,dataset_root/raw/labelled/emopia/Q1_fey-8bOR95E_0.mid,emopia_Q1_fey-8bOR95E_0.npz
+Q2_S7Bo4-NCEDk_2,angry,emopia,dataset_root/raw/labelled/emopia/Q2_S7Bo4-NCEDk_2.mid,emopia_Q2_S7Bo4-NCEDk_2.npz
+Q1_GY3f6ckBVkA_0,happy,emopia,dataset_root/raw/labelled/emopia/Q1_GY3f6ckBVkA_0.mid,emopia_Q1_GY3f6ckBVkA_0.npz
+labelled/phrases/Super Mario_SNES_Super Mario World_Ending Theme_0.mid,calm,vgmidi,dataset_root/raw/labelled/vgmidi/Super Mario_SNES_Super Mario World_Ending Theme.mid,vgmidi_Super_Mario_SNES_Super_Mario_World_Ending_Theme.npz
+Q4_jO2zX6Ul8GM_2,calm,emopia,dataset_root/raw/labelled/emopia/Q4_jO2zX6Ul8GM_2.mid,emopia_Q4_jO2zX6Ul8GM_2.npz
+Q2_ZdyiXIlKe_Y_1,angry,emopia,dataset_root/raw/labelled/emopia/Q2_ZdyiXIlKe_Y_1.mid,emopia_Q2_ZdyiXIlKe_Y_1.npz
+Q4_mGYKWCVnMwQ_0,calm,emopia,dataset_root/raw/labelled/emopia/Q4_mGYKWCVnMwQ_0.mid,emopia_Q4_mGYKWCVnMwQ_0.npz
+Q4_nGkpcWNAxDU_0,calm,emopia,dataset_root/raw/labelled/emopia/Q4_nGkpcWNAxDU_0.mid,emopia_Q4_nGkpcWNAxDU_0.npz
+Q2_k4lT-sXg3iI_2,angry,emopia,dataset_root/raw/labelled/emopia/Q2_k4lT-sXg3iI_2.mid,emopia_Q2_k4lT-sXg3iI_2.npz
+Q4_KxlqB3j0zys_3,calm,emopia,dataset_root/raw/labelled/emopia/Q4_KxlqB3j0zys_3.mid,emopia_Q4_KxlqB3j0zys_3.npz
+Q3_tLmXAWfbGqs_0,sad,emopia,dataset_root/raw/labelled/emopia/Q3_tLmXAWfbGqs_0.mid,emopia_Q3_tLmXAWfbGqs_0.npz
+Q4_Ie5koh4qvJc_20,calm,emopia,dataset_root/raw/labelled/emopia/Q4_Ie5koh4qvJc_20.mid,emopia_Q4_Ie5koh4qvJc_20.npz
+Q3_TonQX8XbvX8_2,sad,emopia,dataset_root/raw/labelled/emopia/Q3_TonQX8XbvX8_2.mid,emopia_Q3_TonQX8XbvX8_2.npz
+Q3_x4B0raxVODA_0,sad,emopia,dataset_root/raw/labelled/emopia/Q3_x4B0raxVODA_0.mid,emopia_Q3_x4B0raxVODA_0.npz
+Q4_0c2dTJTDUR4_1,calm,emopia,dataset_root/raw/labelled/emopia/Q4_0c2dTJTDUR4_1.mid,emopia_Q4_0c2dTJTDUR4_1.npz
+Q1_1Qc15G0ZHIg_2,happy,emopia,dataset_root/raw/labelled/emopia/Q1_1Qc15G0ZHIg_2.mid,emopia_Q1_1Qc15G0ZHIg_2.npz
+Q1_6kRPHamGDSo_0,happy,emopia,dataset_root/raw/labelled/emopia/Q1_6kRPHamGDSo_0.mid,emopia_Q1_6kRPHamGDSo_0.npz
+Q4_JP3QKZlyQz4_1,calm,emopia,dataset_root/raw/labelled/emopia/Q4_JP3QKZlyQz4_1.mid,emopia_Q4_JP3QKZlyQz4_1.npz
+Q3_UE0y8MHqT-g_0,sad,emopia,dataset_root/raw/labelled/emopia/Q3_UE0y8MHqT-g_0.mid,emopia_Q3_UE0y8MHqT-g_0.npz
+labelled/phrases/Chrono_SNES_Chrono Trigger_Corridors of Time_0.mid,calm,vgmidi,dataset_root/raw/labelled/vgmidi/Chrono_SNES_Chrono Trigger_Corridors of Time.mid,vgmidi_Chrono_SNES_Chrono_Trigger_Corridors_of_Time.npz
+Q4_xgtwQGeB6_0_0,calm,emopia,dataset_root/raw/labelled/emopia/Q4_xgtwQGeB6_0_0.mid,emopia_Q4_xgtwQGeB6_0_0.npz
+Q2_f2BXXa7lPuE_3,angry,emopia,dataset_root/raw/labelled/emopia/Q2_f2BXXa7lPuE_3.mid,emopia_Q2_f2BXXa7lPuE_3.npz
+Q4_XPLYvpyfKUM_0,calm,emopia,dataset_root/raw/labelled/emopia/Q4_XPLYvpyfKUM_0.mid,emopia_Q4_XPLYvpyfKUM_0.npz
+Q4_9v2WSpn4FCw_9,calm,emopia,dataset_root/raw/labelled/emopia/Q4_9v2WSpn4FCw_9.mid,emopia_Q4_9v2WSpn4FCw_9.npz
+Q4_J6X3rVU1H-c_0,calm,emopia,dataset_root/raw/labelled/emopia/Q4_J6X3rVU1H-c_0.mid,emopia_Q4_J6X3rVU1H-c_0.npz

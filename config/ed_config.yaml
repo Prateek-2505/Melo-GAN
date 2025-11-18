@@ -9,13 +9,13 @@ device: cuda
 dropout: 0.2
 early_stopping_patience: 10
 encoder_feats_path: data/splits/train/encoder_feats.npy
-input_mode: latent
+input_mode: notes
 labels:
   - happy
   - sad
   - angry
   - calm
-latent_dim: 128
+latent_dim: 64
 log_dir: data/experiments/ed
 manifest_csv: data/docs/data_manifest.csv
 max_notes: 512
@@ -55,4 +55,4 @@ use_spectral_norm: false
 val_encoder_feats_path: data/splits/val/encoder_feats.npy
 val_split_csv: data/splits/val_split.csv
 
-use_weighted_sampler: true   # or false
+use_weighted_sampler: false #true   

@@ -5,6 +5,9 @@ import pandas as pd
 from .path_utils import ensure_dir
 
 def resolve(cfg):
+    '''
+    Returns train/val lists of processed npz files.
+    '''
     processed_dir = cfg.get('PROCESSED_DIR', 'processed')
     splits_dir = cfg.get('SPLITS_DIR', 'splits')
     model_dir = cfg.get('CHECKPOINT_DIR', 'models/ae')
@@ -22,11 +25,13 @@ def resolve(cfg):
     train_df = pd.read_csv(train_csv)
     val_df = pd.read_csv(val_csv)
 
-    # Build file lists (paths to .npz)
     def resolve_paths(df):
+        ''' Build file lists (paths to .npz)
+        return list of files
+        '''
         files = []
         for _, row in df.iterrows():
-            fname = row['npz_filename']
+            fname = row['npz_path']
             # possible that processed files were saved as <stem>.npz
             candidates = [
                 os.path.join(processed_dir, fname if fname.endswith('.npz') else os.path.splitext(fname)[0] + '.npz')

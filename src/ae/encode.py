@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """
-Encoder inference utility (robust manifest handling).
+VAE Encoder inference utility.
+
+Loads the trained VAE model and extracts the 'mu' (mean)
+of the latent distribution as the representative latent vector.
 
 Usage example:
   python -m src.ae.encode \
-    --encoder data/models/ae/encoder_final.pth \
+    --model data/models/ae/ae_best.pth \
     --manifest data/splits/train_split.csv \
     --out_file data/splits/train/encoder_feats.npy \
     --processed_dir data/processed \
@@ -20,6 +23,8 @@ import torch
 from pathlib import Path
 from tqdm import tqdm
 import sys
+from torch.utils.data import DataLoader
+
 
 # Ensure repo root on path when run as module
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -27,126 +32,113 @@ sys.path.append(str(REPO_ROOT))
 
 # Absolute imports from project
 from src.ae.path_utils import load_config, ensure_dir
-# Import ConvEncoder definition from the ae training module
-from .model import ConvEncoder
-
-def resolve_processed_path(processed_dir, filename):
-    """Try direct .npz match, then stem search in processed_dir."""
-    if not isinstance(filename, str):
-        return None
-    # direct .npz path
-    if filename.lower().endswith('.npz'):
-        p = filename if os.path.isabs(filename) else os.path.join(processed_dir, filename)
-        if os.path.exists(p):
-            return p
-    # if filename is full path and exists
-    if os.path.exists(filename):
-        # if it's .npz return it
-        if filename.lower().endswith('.npz'):
-            return filename
-        # else search by stem
-        stem = os.path.splitext(os.path.basename(filename))[0]
-    else:
-        stem = os.path.splitext(os.path.basename(filename))[0]
-    # search processed_dir by stem
-    candidates = glob.glob(os.path.join(processed_dir, f"*{stem}*.npz"))
-    if candidates:
-        return candidates[0]
-    return None
-
-def build_file_list_from_manifest(manifest_df, processed_dir):
-    preferred_cols = ['npz_filename', 'processed_file', 'processed', 'full_path', 'filepath', 'file', 'filename', 'file_key']
-    col_found = None
-    for c in preferred_cols:
-        if c in manifest_df.columns:
-            col_found = c
-            break
-    if col_found is None:
-        raise KeyError(f"Manifest must contain one of {preferred_cols}. Found columns: {list(manifest_df.columns)}")
-
-    files = []
-    file_names = []
-    for _, r in manifest_df.iterrows():
-        raw_cell = r[col_found]
-        # Try direct resolve
-        p = resolve_processed_path(processed_dir, str(raw_cell))
-        if p is not None:
-            files.append(p); file_names.append(os.path.basename(p)); continue
-        # Fallback: if there is explicit npz_filename column, try it
-        if 'npz_filename' in manifest_df.columns:
-            npzcell = r['npz_filename']
-            p2 = resolve_processed_path(processed_dir, str(npzcell))
-            if p2 is not None:
-                files.append(p2); file_names.append(os.path.basename(p2)); continue
-        # Could not resolve
-        print("Warning: could not locate processed .npz for manifest row:", dict(r))
-    return files, file_names
-
+from src.ae.model import  VAE # Import the VAE class
+from src.ae.dataset import MIDIDataset # Use the same dataset for consistency
+def resolve_paths_for_encode(df, processed_dir):
+        files = []
+        for _, row in df.iterrows():
+            fname = row['npz_path']
+            candidates = [
+                os.path.join(processed_dir, fname if fname.endswith('.npz') else os.path.splitext(fname)[0] + '.npz')
+            ]
+            # Fallback: search processed dir for any containing filename stem
+            if not os.path.exists(candidates[0]):
+                stem = os.path.splitext(fname)[0]
+                found = glob.glob(os.path.join(processed_dir, f"*{stem}*.npz"))
+                if found:
+                    candidates = [found[0]]
+            
+            if os.path.exists(candidates[0]):
+                files.append(candidates[0])
+            else:
+                # This will now match the training script's behavior
+                print(f"Warning: processed file for {fname} not found in {processed_dir}. Skipping.")
+        return files
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--encoder", type=str, required=True, help="Path to encoder_final.pth")
-    parser.add_argument("--manifest", type=str, required=True, help="CSV listing files (various column names supported)")
+    parser.add_argument("--model", type=str, required=True, help="Path to full ae_best.pth VAE model")
+    parser.add_argument("--manifest", type=str, required=True, help="CSV listing files")
     parser.add_argument("--processed_dir", type=str, default="data/processed", help="Processed .npz dir")
-    parser.add_argument("--out_file", type=str, required=True, help="Output .npy file for latents")
+    parser.add_argument("--out_file", type=str, required=True, help="Output .npy file for latents (mu)")
     parser.add_argument("--config", type=str, default="config/ae_config.yaml", help="Config with LATENT_DIM, MAX_NOTES")
     args = parser.parse_args()
 
     cfg = load_config(args.config)
-    latent_dim = cfg['LATENT_DIM']
-    processed_dir = args.processed_dir
+    
+    # --- Resolve paths from config ---
+    if not os.path.isabs(args.manifest):
+        args.manifest = os.path.join(REPO_ROOT, args.manifest)
+    if not os.path.isabs(args.processed_dir):
+        args.processed_dir = os.path.join(REPO_ROOT, args.processed_dir)
+    if not os.path.isabs(args.out_file):
+        args.out_file = os.path.join(REPO_ROOT, args.out_file)
+    if not os.path.isabs(args.model):
+        args.model = os.path.join(REPO_ROOT, args.model)
+        
+    cfg['PROCESSED_DIR'] = args.processed_dir
+    cfg['SPLITS_DIR'] = os.path.dirname(args.manifest)
+    split_name = Path(args.manifest).stem.replace('_split', '')
 
-    manifest = pd.read_csv(args.manifest)
-    files, file_names = build_file_list_from_manifest(manifest, processed_dir)
-    print("Found", len(files), "processed files to encode (processed_dir=", processed_dir, ")")
+    # --- Use the same MIDIDataset from training ---
+    try:
+        
+        manifest_df = pd.read_csv(args.manifest)
+        manifest_paths = resolve_paths_for_encode(manifest_df, args.processed_dir)
+        
+    except KeyError:
+        print(f"Error: 'npz_path' column not found in {args.manifest}.")
+        print("Please run create_splits.py first.")
+        sys.exit(1)
+        
+    dataset = MIDIDataset(
+        manifest_paths,
+        cfg,
+        augment=False
+    )
+    loader = DataLoader(dataset, batch_size=32, shuffle=False, num_workers=4)
+    print(f"Found {len(dataset)} files to encode for split: {split_name}")
 
-    if len(files) == 0:
+    if len(dataset) == 0:
         raise RuntimeError("No processed files found. Check manifest and processed_dir paths.")
 
-    # build encoder
+    # --- Build VAE model ---
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    encoder = ConvEncoder(in_channels=4, latent_dim=cfg['LATENT_DIM'])
-    # warm-build linear by passing dummy
-    dummy = torch.zeros(1, cfg['MAX_NOTES'], 4)
-    with torch.no_grad():
-        _ = encoder(dummy)
-    # load weights
-    state = torch.load(args.encoder, map_location=device)
-    # state may be a dict containing 'model_state' or a raw state_dict
-    if isinstance(state, dict) and 'model_state' in state:
-        state = state['model_state']
-    # state is expected to be encoder state dict (not full ae)
+    model = VAE(cfg).to(device)
+    print("Initializing dynamic model layers...")
     try:
-        encoder.load_state_dict(state)
-    except Exception:
-        # try if state itself is encoder-only
-        try:
-            encoder.load_state_dict(state)
-        except Exception as e:
-            raise RuntimeError("Failed to load encoder state. Check encoder checkpoint format.") from e
-
-    encoder.to(device)
-    encoder.eval()
+        dummy_notes = torch.zeros(1, cfg['MAX_NOTES'], 4).to(device)
+        with torch.no_grad():
+            _ = model.encoder(dummy_notes)
+    except Exception as e:
+        print(f"Error during model initialization with dummy batch: {e}")
+        print("Check your config's MAX_NOTES setting.")
+        sys.exit(1)
+        
+    # Load the VAE state dict
+    print(f"Loading model from {args.model}")
+    ckpt = torch.load(args.model, map_location=device)
+    state_dict = ckpt['model_state'] if 'model_state' in ckpt else ckpt
+    model.load_state_dict(state_dict)
+    model.eval()
 
     latents = []
-    for p in tqdm(files, desc="Encoding"):
-        data = np.load(p, allow_pickle=True)
-        if 'notes' not in data:
-            print("Warning: 'notes' missing in", p); continue
-        notes = data['notes'].astype(np.float32)
-        notes_tensor = torch.from_numpy(notes).unsqueeze(0).to(device)  # (1, MAX_NOTES, 4)
-        with torch.no_grad():
-            z = encoder(notes_tensor)
-            z = z.cpu().numpy()[0]
-        latents.append(z)
+    with torch.no_grad():
+        for batch_notes, _ in tqdm(loader, desc=f"Encoding {split_name} split"):
+            batch_notes = batch_notes.to(device)
+            
+            # --- VAE forward pass ---
+            # We only care about 'mu', the mean of the latent space.
+            # This is the most stable vector to use for classification.
+            recon, z, mu, log_var = model(batch_notes)
+            
+            latents.append(mu.cpu().numpy())
 
-    latents = np.stack(latents, axis=0)
-    ensure_dir(os.path.dirname(args.out_file) or ".")
+    latents = np.concatenate(latents, axis=0)
+    
+    ensure_dir(os.path.dirname(args.out_file))
     np.save(args.out_file, latents)
-    # save mapping manifest
-    map_df = pd.DataFrame({'processed_file': file_names, 'latent_index': np.arange(len(file_names))})
-    map_df.to_csv(os.path.splitext(args.out_file)[0] + "_manifest.csv", index=False)
-    print("Saved latents ->", args.out_file)
-    print("Saved manifest ->", os.path.splitext(args.out_file)[0] + "_manifest.csv")
+    
+    print(f"Saved latents ({latents.shape}) -> {args.out_file}")
 
 if __name__ == "__main__":
     main()

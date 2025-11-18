@@ -37,6 +37,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 import random
 import warnings
+import glob  
 
 DEFAULT_LABELS = ["happy", "sad", "angry", "calm"]
 
@@ -132,7 +133,7 @@ class EmotionDataset(Dataset):
 
         # determine which column refers to the file key/path
         self.file_col = None
-        for c in ["npz_filename", "file_key", "full_path", "filename", "path", "file"]:
+        for c in ["npz_path", "file_key", "full_path", "filename", "path", "file"]:
             if c in self.df.columns:
                 self.file_col = c
                 break
@@ -146,7 +147,7 @@ class EmotionDataset(Dataset):
                     self.file_col = list(common)[0]
             if self.file_col is None:
                 raise ValueError("Split CSV must contain a file identifier column. One of: "
-                                 "npz_filename, file_key, full_path, filename, path, file")
+                                 "npz_path, file_key, full_path, filename, path, file")
 
         # load manifest mapping if present
         self._manifest_map = None
@@ -161,7 +162,7 @@ class EmotionDataset(Dataset):
                         path_col = c
                         break
                 key_col = None
-                for c in ["file_key", "npz_filename", "filename", "file"]:
+                for c in ["file_key", "npz_path", "filename", "file"]:
                     if c in mdf.columns:
                         key_col = c
                         break
@@ -394,7 +395,7 @@ def build_dataloader(cfg: Dict[str, Any], split: str = "train", shuffle: bool = 
     if cfg.get("input_mode", "latent") == "latent":
         if encoder_map:
             file_col = None
-            for c in ["npz_filename", "file_key", "full_path", "filename", "path", "file"]:
+            for c in ["npz_path", "file_key", "full_path", "filename", "path", "file"]:
                 if c in df.columns:
                     file_col = c
                     break
@@ -429,7 +430,49 @@ def build_dataloader(cfg: Dict[str, Any], split: str = "train", shuffle: bool = 
             df_filtered = df
             print("[ed_dataset] Warning: input_mode=latent but no encoder_feats found; attempting to proceed (will likely error).")
     else:
-        df_filtered = df
+        # notes mode: We must verify that the .npz files actually exist.
+        print("[ed_dataset] Input mode is 'notes'. Verifying .npz file paths...")
+        processed_dir = cfg.get('processed_dir', 'data/processed')
+
+        # Find the file column
+        file_col = None
+        for c in ["npz_path", "file_key", "full_path", "filename", "path", "file"]:
+            if c in df.columns:
+                file_col = c
+                break
+        if file_col is None:
+            raise ValueError("Cannot find file identifier column ('npz_path', 'filename', etc.) for 'notes' mode.")
+
+        # This logic is adapted from your project's resolve_splits.py
+        # to filter out missing .npz files before loading.
+        keep_indices = []
+        for idx, row in df.iterrows():
+            fname = row[file_col]
+            if pd.isna(fname):
+                continue
+
+            # Try a direct join first
+            cand = os.path.join(processed_dir, fname if fname.endswith('.npz') else os.path.splitext(fname)[0] + '.npz')
+
+            if os.path.exists(cand):
+                keep_indices.append(idx)
+                continue
+
+            # Fallback: search processed dir for basename
+            try:
+                stem = os.path.splitext(os.path.basename(fname))[0]
+                found = glob.glob(os.path.join(processed_dir, f"*{stem}*.npz"))
+                if found and os.path.exists(found[0]):
+                    keep_indices.append(idx)
+                else:
+                    print(f"[ed_dataset] Warning: processed file for {fname} not found. Skipping.")
+            except Exception:
+                print(f"[ed_dataset] Warning: Could not parse file path {fname}. Skipping.")
+
+        df_filtered = df.loc[keep_indices].reset_index(drop=True)
+        dropped = orig_len - len(df_filtered)
+        if dropped > 0:
+            print(f"[ed_dataset] 'notes' mode: dropped {dropped} rows from {orig_len} (kept {len(df_filtered)}) due to missing .npz files.")
 
     # if filtering happened, write filtered csv to a safe location and use that path
     filtered_csv_path = split_csv

@@ -12,5 +12,8 @@ def load_config(path):
         return yaml.safe_load(f)
 
 def ensure_dir(p):
+    '''
+    Ensure directory exists.
+    '''
     os.makedirs(p, exist_ok=True)
     return p

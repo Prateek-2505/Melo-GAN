@@ -1,29 +1,28 @@
-# src/ae/model.py
 import torch
 import torch.nn as nn
 
 class ConvEncoder(nn.Module):
-    def __init__(self, in_channels=4, latent_dim=128):
+    def __init__(self, in_channels=4, latent_dim=128, hidden_dim=512):
+        '''
+        Encoder. Outputs a hidden vector, not the final latent params.
+        '''
         super().__init__()
-        # input shape: (B, in_channels, MAX_NOTES)
         self.conv = nn.Sequential(
-            nn.Conv1d(in_channels, 64, kernel_size=5, stride=2, padding=2),
+            nn.Conv1d(in_channels, 32, kernel_size=5, stride=2, padding=2),
+            nn.BatchNorm1d(32),
+            nn.ReLU(inplace=True),
+
+            nn.Conv1d(32, 64, kernel_size=5, stride=2, padding=2),
             nn.BatchNorm1d(64),
             nn.ReLU(inplace=True),
 
             nn.Conv1d(64, 128, kernel_size=5, stride=2, padding=2),
             nn.BatchNorm1d(128),
             nn.ReLU(inplace=True),
-
-            nn.Conv1d(128, 256, kernel_size=5, stride=2, padding=2),
-            nn.BatchNorm1d(256),
-            nn.ReLU(inplace=True),
-        )
-        self.pool_out = None
-        self._output_flat = None
-        # We'll infer the flattened size at runtime using a dummy forward in init
-        self._linear = None
+            )
         self.latent_dim = latent_dim
+        self.hidden_dim = hidden_dim
+        self._linear = None
 
     def build_linear(self, seq_len):
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -32,10 +31,9 @@ class ConvEncoder(nn.Module):
         flattened = y.view(1, -1).shape[1]
         self._linear = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(flattened, 512),
-            nn.ReLU(inplace=True),
-            nn.Linear(512, self.latent_dim)
-        )
+            nn.Linear(flattened, self.hidden_dim),
+            nn.ReLU(inplace=True)
+        ).to(device)
 
     def forward(self, x):
         # x: (B, MAX_NOTES, 4)
@@ -45,72 +43,107 @@ class ConvEncoder(nn.Module):
             self.build_linear(x.shape[-1])
             self._linear = self._linear.to(x.device)
             
-        z = self._linear(y.view(y.size(0), -1))
-        return z
+        # Get the final hidden state
+        h = self._linear(y.view(y.size(0), -1))
+        return h
 
 class ConvDecoder(nn.Module):
-    def __init__(self, out_channels=4, max_notes=512, latent_dim=128):
+    def __init__(self, out_channels=4, max_notes=512, latent_dim=128, hidden_dim=512):
         super().__init__()
         self.latent_dim = latent_dim
         self.max_notes = max_notes
-        # We'll invert the encoder mapping by mapping latent -> flattened conv shape then transposed conv
-        # To keep it simple, we'll reconstruct with linear layers -> reshape -> conv transpose
-        # We'll assume the encoder reduced length by 2^3 = 8 (approx) if using same strides
+        self.hidden_dim=hidden_dim
         reduced_len = max(1, max_notes // 8)
-        flattened = 256 * reduced_len  # must match encoder final conv channels * reduced_len
+        flattened = 128 * reduced_len
+        
         self.pre = nn.Sequential(
-            nn.Linear(self.latent_dim, 512),
+            nn.Linear(self.latent_dim, self.hidden_dim),
             nn.ReLU(inplace=True),
-            nn.Linear(512, flattened),
+            nn.Linear(self.hidden_dim, flattened),
             nn.ReLU(inplace=True)
         )
-        # transpose conv stack to produce (B, out_channels, MAX_NOTES)
         self.deconv = nn.Sequential(
-            nn.ConvTranspose1d(256, 128, kernel_size=5, stride=2, padding=2, output_padding=1),
-            nn.BatchNorm1d(128),
-            nn.ReLU(inplace=True),
-
             nn.ConvTranspose1d(128, 64, kernel_size=5, stride=2, padding=2, output_padding=1),
             nn.BatchNorm1d(64),
             nn.ReLU(inplace=True),
 
-            nn.ConvTranspose1d(64, out_channels, kernel_size=5, stride=2, padding=2, output_padding=1),
-            # final output will be (B, out_channels, ~MAX_NOTES)
+            nn.ConvTranspose1d(64, 32, kernel_size=5, stride=2, padding=2, output_padding=1),
+            nn.BatchNorm1d(32),
+            nn.ReLU(inplace=True),
+
+            nn.ConvTranspose1d(32, out_channels, kernel_size=5, stride=2, padding=2, output_padding=1),
+            nn.Tanh() # Add Tanh to match normalized data range [-1, 1]
         )
 
     def forward(self, z):
         b = z.size(0)
         y = self.pre(z)
-        # determine reduced_len from y
-        # infer channels = 256
-        # reshape to (B, 256, reduced_len)
         total = y.shape[1]
-        # choose 256 channels, compute len
-        if total % 256 != 0:
-            # fallback: reshape to (B, 256, total//256)
-            reduced_len = max(1, total // 256)
-            y = y[:, :256 * reduced_len]
+        
+        if total % 128 != 0:
+            reduced_len = max(1, total // 128)
+            y = y[:, :128 * reduced_len]
         else:
-            reduced_len = total // 256
-        y = y.view(b, 256, reduced_len)
+            reduced_len = total // 128
+            
+        y = y.view(b, 128, reduced_len)
         out = self.deconv(y)
-        # out shape: (B, out_channels, approx MAX_NOTES) -> trim/pad to exact MAX_NOTES
-        out = out.permute(0,2,1)  # (B, MAX_NOTES_approx, out_channels)
-        # Ensure we have exactly max_notes by trimming or padding zeros
+        out = out.permute(0,2,1)
+        
         if out.size(1) > self.max_notes:
             out = out[:, :self.max_notes, :]
         elif out.size(1) < self.max_notes:
             pad = torch.zeros(out.size(0), self.max_notes - out.size(1), out.size(2), device=out.device)
             out = torch.cat([out, pad], dim=1)
-        return out  # (B, MAX_NOTES, out_channels)
+        return out
 
-class Autoencoder(nn.Module):
+class VAE(nn.Module):
+    """
+    Variational Autoencoder (VAE)
+    Replaces the standard Autoencoder to prevent posterior collapse.
+    """
     def __init__(self, cfg):
         super().__init__()
-        self.encoder = ConvEncoder(in_channels=4, latent_dim=cfg['LATENT_DIM'])
-        self.decoder = ConvDecoder(out_channels=4, max_notes=cfg['MAX_NOTES'], latent_dim=cfg['LATENT_DIM'])
+        latent_dim = cfg['LATENT_DIM']
+        hidden_dim = 512 # Or read from cfg if available
+        
+        self.encoder = ConvEncoder(
+            in_channels=4, 
+            latent_dim=latent_dim, 
+            hidden_dim=hidden_dim
+        )
+        
+        # VAE-specific layers
+        self.fc_mu = nn.Linear(hidden_dim, latent_dim)
+        self.fc_log_var = nn.Linear(hidden_dim, latent_dim)
+        
+        self.decoder = ConvDecoder(
+            out_channels=4, 
+            max_notes=cfg['MAX_NOTES'], 
+            latent_dim=latent_dim,
+            hidden_dim=hidden_dim
+        )
+
+    def reparameterize(self, mu, log_var):
+        """
+        The reparameterization trick to allow backpropagation
+        """
+        std = torch.exp(0.5 * log_var)
+        eps = torch.randn_like(std) # eps ~ N(0, 1)
+        return mu + eps * std
 
     def forward(self, x):
-        z = self.encoder(x)
+        # 1. Encode
+        h = self.encoder(x)
+        
+        # 2. Get latent distribution parameters
+        mu = self.fc_mu(h)
+        log_var = self.fc_log_var(h)
+        
+        # 3. Sample from distribution
+        z = self.reparameterize(mu, log_var)
+        
+        # 4. Decode
         recon = self.decoder(z)
-        return recon, z
+        
+        return recon, z, mu, log_var

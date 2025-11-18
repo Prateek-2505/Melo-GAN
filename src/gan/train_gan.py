@@ -1,208 +1,285 @@
 #!/usr/bin/env python3
 """
-Train GAN using AE encoder either as conditioning vector or warm-start decoder.
+Train MELO-GAN with WGAN-GP, Numeric Feature Conditioning, and Pre-trained Emotion Discriminator.
 
-This version expects your config to include:
- - SPLITS_DIR (e.g. "data/splits")
- - TRAIN_SPLIT (CSV path relative to repo or absolute)
- - VAL_SPLIT
- - ENCODER_FEATS_TRAIN / ENCODER_FEATS_VAL (paths to .npy produced by encoder)
- - PROCESSED_DIR (e.g. "data/processed")
+Architecture:
+- Generator (G): Conditioned on Noise + Latent + Numeric Features.
+- Discriminator (D): WGAN-GP Critic (Real vs Fake), conditioned on Numeric Features.
+- Emotion Discriminator (ED): Pre-trained Classifier (Fixed/Frozen), judges emotion of generated notes.
 """
 
 import os
 import argparse
 import yaml
 from pathlib import Path
-
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
+from torch.utils.tensorboard import SummaryWriter
 
-from src.gan.models import Generator, Discriminator
+# --- UPDATED IMPORTS ---
+from src.gan.models import Generator, Discriminator  # D is the WGAN-GP Critic
+from src.emotion_discriminator.ed_model import EmotionDiscriminator # ED from its own file
+from src.gan.feature_encoder import FeatureEncoder
 from src.gan.dataset import GANDataset
-from src.gan.utils import seed_everything, weights_init, load_ae_decoder_into_generator, emotion_to_index
+from src.gan.utils import (
+    seed_everything, 
+    weights_init, 
+    load_ae_decoder_into_generator, 
+    emotion_to_index,
+    compute_gradient_penalty
+)
 
 def load_config(path):
     with open(path) as f:
         return yaml.safe_load(f)
 
 def prepare_dataset(cfg, split_csv, latent_feats_path=None):
-    # allow splits dir to be specified in config
+    # (This function is correct, no changes needed)
     splits_dir = cfg.get('SPLITS_DIR', 'data/splits')
-    # If user passed a relative filename, try to resolve under splits_dir
     if not os.path.isabs(split_csv) and not os.path.exists(split_csv):
         candidate = os.path.join(splits_dir, split_csv)
-        if os.path.exists(candidate):
-            split_csv = candidate
+        if os.path.exists(candidate): split_csv = candidate
     split_name = Path(split_csv).stem
     notes_npy = os.path.join(splits_dir, split_name, "notes.npy")
     emo_npy = os.path.join(splits_dir, split_name, "emotion.npy")
+    numeric_npy = os.path.join(splits_dir, split_name, "numeric_features.npy")
     latent_feats = None
     if latent_feats_path and os.path.exists(latent_feats_path):
         latent_feats = np.load(latent_feats_path)
-    # processed_dir from config
-    processed_dir = cfg.get('PROCESSED_DIR', 'data/processed')
-    ds = GANDataset(split_csv, processed_dir=processed_dir,
-                    notes_npy=notes_npy if os.path.exists(notes_npy) else None,
-                    emotion_npy=emo_npy if os.path.exists(emo_npy) else None,
-                    latent_feats=latent_feats)
-    return ds
+    return GANDataset(
+        split_csv, 
+        processed_dir=cfg.get('PROCESSED_DIR', 'data/processed'),
+        notes_npy=notes_npy if os.path.exists(notes_npy) else None,
+        emotion_npy=emo_npy if os.path.exists(emo_npy) else None,
+        latent_feats=latent_feats,
+        numeric_features_npy=numeric_npy if os.path.exists(numeric_npy) else None,
+        numeric_input_dim=cfg.get('NUMERIC_INPUT_DIM', 6),
+        latent_dim=cfg['LATENT_DIM']
+    )
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, default="config/gan_config.yaml")
+    parser.add_argument("--config", type=str, default="config/gan_config.yaml", help="Path to the main GAN config")
+    parser.add_argument("--ed_config", type=str, default="config/ed_config.yaml", help="Path to the ED config")
+    parser.add_argument("--ed_ckpt", type=str, default="data/models/ed/ed_best.pth")
     args = parser.parse_args()
-    cfg = load_config(args.config)
+    
+    # Load BOTH config files
+    cfg = load_config(args.config)       # Main GAN config
+    ed_cfg = load_config(args.ed_config) # Emotion Discriminator config
 
     seed_everything(cfg.get("SEED", 42))
     device = torch.device(cfg.get("DEVICE", "cuda") if torch.cuda.is_available() else "cpu")
+    print(f"Using main device: {device}")
 
-    # prepare dataset
-    train_ds = prepare_dataset(cfg, cfg['TRAIN_SPLIT'], latent_feats_path=cfg.get('ENCODER_FEATS_TRAIN', None))
-    val_ds = prepare_dataset(cfg, cfg['VAL_SPLIT'], latent_feats_path=cfg.get('ENCODER_FEATS_VAL', None))
-
-    # dataloaders
+    # --- 1. Prepare Data ---
+    train_ds = prepare_dataset(cfg, cfg['TRAIN_SPLIT'], cfg.get('ENCODER_FEATS_TRAIN', None))
     train_loader = DataLoader(train_ds, batch_size=cfg.get('BATCH_SIZE', 32), shuffle=True, num_workers=4, drop_last=True)
-    val_loader = DataLoader(val_ds, batch_size=cfg.get('BATCH_SIZE', 32), shuffle=False, num_workers=2)
+    print(f"Train set size: {len(train_ds)}")
 
-    print("Train set size:", len(train_ds), "Val set size:", len(val_ds))
+    # --- 2. Instantiate Models ---
+    
+    # A. Numeric Encoder
+    numeric_input_dim = cfg.get('NUMERIC_INPUT_DIM', 6)
+    numeric_embed_dim = cfg.get('ENCODER_OUT_DIM', 128)
+    E_num = FeatureEncoder(
+        in_dim=numeric_input_dim,
+        hidden_dims=cfg.get('ENCODER_HIDDEN', [256, 128]),
+        out_dim=numeric_embed_dim
+    ).to(device)
+    
+    # B. Generator
+    G = Generator(
+        noise_dim=cfg['NOISE_DIM'], 
+        latent_dim=cfg['LATENT_DIM'], 
+        mode=cfg.get('INTEGRATION_MODE', 'conditioning'), 
+        max_notes=cfg['MAX_NOTES'], 
+        note_dim=cfg['NOTE_DIM'],
+        numeric_embed_dim=numeric_embed_dim
+    ).to(device)
+    
+    # C. Discriminator (WGAN)
+    D_discriminator = Discriminator(
+        max_notes=cfg['MAX_NOTES'], 
+        note_dim=cfg['NOTE_DIM'],
+        numeric_embed_dim=numeric_embed_dim
+    ).to(device)
+    
+    # D. Emotion Discriminator (Classifier)
+    print("[INFO] Instantiating Emotion Discriminator using ed_config.yaml")
+    D_emotion = EmotionDiscriminator(ed_cfg).to(device)
 
-    # instantiate models
-    mode = cfg.get('INTEGRATION_MODE', 'conditioning')
-    G = Generator(noise_dim=cfg['NOISE_DIM'], latent_dim=cfg['LATENT_DIM'], mode=mode, hidden=cfg.get('GEN_HIDDEN',512), max_notes=cfg['MAX_NOTES'], note_dim=cfg['NOTE_DIM']).to(device)
-    D = Discriminator(max_notes=cfg['MAX_NOTES'], note_dim=cfg['NOTE_DIM']).to(device)
-
+    # --- 3. Initialization & Loading ---
+    E_num.apply(weights_init)
     G.apply(weights_init)
-    D.apply(weights_init)
+    D_discriminator.apply(weights_init)
+    
+    # Load Pre-trained Emotion Discriminator
+    ed_path = args.ed_ckpt
+    if os.path.exists(ed_path):
+        print(f"[INFO] Loading pre-trained Emotion Discriminator from {ed_path}")
+        ckpt = torch.load(ed_path, map_location=device)
+        state_dict = ckpt['model'] if 'model' in ckpt else ckpt
+        D_emotion.load_state_dict(state_dict, strict=False)
+    else:
+        print(f"[WARN] ED checkpoint not found at {ed_path}. ED will be random!")
 
-    # If warm_start, try loading AE decoder weights
-    if mode == "warm_start":
-        ok = load_ae_decoder_into_generator(cfg.get('AE_FULL_CKPT', ''), G)
-        if not ok:
-            print("[WARN] warm_start failed, switching to conditioning mode (requires encoder_feats).")
-            mode = "conditioning"
-            G.mode = "conditioning"
+    # Freeze Emotion Discriminator
+    for param in D_emotion.parameters():
+        param.requires_grad = False
+    D_emotion.eval()
 
-    # optimizers
-    opt_G = optim.Adam(G.parameters(), lr=float(cfg['LR_G']), betas=(cfg.get('BETA1',0.5), 0.999), weight_decay=float(cfg.get('WEIGHT_DECAY', 0.0)))
-    opt_D = optim.Adam(D.parameters(), lr=float(cfg['LR_D']), betas=(cfg.get('BETA1',0.5), 0.999), weight_decay=float(cfg.get('WEIGHT_DECAY', 0.0)))
+    # --- 4. Optimizers ---
+    opt_G = optim.Adam(
+        list(G.parameters()) + list(E_num.parameters()), 
+        lr=float(cfg['LR_G']), 
+        betas=(cfg.get('BETA1', 0.5), cfg.get('BETA2', 0.9))
+    )
+    opt_D = optim.Adam(
+        D_discriminator.parameters(), 
+        lr=float(cfg['LR_D']), 
+        betas=(cfg.get('BETA1', 0.5), cfg.get('BETA2', 0.9))
+    )
 
-    adversarial_loss = nn.BCEWithLogitsLoss()
-    emotion_loss = nn.CrossEntropyLoss()
-
-    # training loop
+    # --- 5. Training Loop ---
+    writer = SummaryWriter(log_dir=cfg['LOG_DIR'])
     os.makedirs(cfg['CHECKPOINT_DIR'], exist_ok=True)
-    os.makedirs(cfg['LOG_DIR'], exist_ok=True)
     os.makedirs(cfg['SAMPLE_DIR'], exist_ok=True)
+    
+    criterion_emo = nn.CrossEntropyLoss()
+    lambda_gp = cfg.get('LAMBDA_GP', 10.0)
+    lambda_emotion = cfg.get('LAMBDA_EMOTION', 1.0)
+    critic_iters = cfg.get('CRITIC_ITERS', 5)
+
+    print("Starting WGAN-GP Training with Emotion Guidance...")
 
     for epoch in range(1, cfg['EPOCHS'] + 1):
-        G.train(); D.train()
-        epoch_g_loss = 0.0
-        epoch_d_loss = 0.0
+        G.train()
+        E_num.train()
+        D_discriminator.train()
+        
+        ep_loss_d = 0.0
+        ep_loss_g = 0.0
+        ep_loss_g_emo = 0.0
+        
         for batch_idx, batch in enumerate(train_loader):
-            notes_batch, emot_batch, latent_batch = batch  # notes:(B,MAX_NOTES,4), emot: label or mood, latent: (B,LATENT_DIM) or None
+            notes_real, emot_batch, latent_batch, numeric_batch = batch
+            bsize = notes_real.size(0)
 
-            # convert emot to indices (emotion_to_index handles many types)
+            notes_real = notes_real.to(device)
+            numeric_batch = numeric_batch.to(device)
             emot_idx = torch.tensor([emotion_to_index(e) for e in emot_batch], dtype=torch.long, device=device)
-
-            notes_batch = notes_batch.to(device)
-
-            # prepare latent_feats (for conditioning) if provided by dataset
+            
+            encoder_latent = None
             if latent_batch is not None:
-                # latent_batch may be a numpy array (if dataset used npy) or list; handle robustly
-                if isinstance(latent_batch, np.ndarray):
-                    encoder_latent = torch.from_numpy(latent_batch).float().to(device)
-                else:
-                    encoder_latent = torch.tensor(np.stack(latent_batch), dtype=torch.float32, device=device)
-            else:
-                encoder_latent = None
+                encoder_latent = (torch.from_numpy(latent_batch) if isinstance(latent_batch, np.ndarray) else torch.tensor(np.stack(latent_batch))).float().to(device)
 
-            bsize = notes_batch.size(0)
-            # --------------------------
-            # Train Discriminator
-            # --------------------------
+            # ---------------------
+            #  Train Discriminator (D)
+            # ---------------------
             opt_D.zero_grad()
-            # Real
-            rf_real_logits, emo_logits_real, _ = D(notes_batch)
-            real_targets = torch.ones_like(rf_real_logits, device=device)
-            loss_real = adversarial_loss(rf_real_logits, real_targets)
-            # emotion classification loss on real
-            loss_emo_real = emotion_loss(emo_logits_real, emot_idx)
-            # Fake
-            noise = torch.randn(bsize, cfg['NOISE_DIM'], device=device)
-            if mode == "conditioning":
-                if encoder_latent is None:
-                    raise RuntimeError("conditioning mode requires encoder latent vectors in dataset (provide ENCODER_FEATS_TRAIN in config).")
-                gen_notes, _ = G(noise, encoder_latent)
-            else:
-                gen_notes, _ = G(noise, None)
-            rf_fake_logits, emo_logits_fake, _ = D(gen_notes.detach())
-            fake_targets = torch.zeros_like(rf_fake_logits, device=device)
-            loss_fake = adversarial_loss(rf_fake_logits, fake_targets)
-            # discriminator total
-            loss_D = loss_real + loss_fake + loss_emo_real * cfg.get('LAMBDA_EMOTION', 1.0)
-            loss_D.backward()
-            opt_D.step()
 
-            # --------------------------
-            # Train Generator
-            # --------------------------
-            opt_G.zero_grad()
-            noise = torch.randn(bsize, cfg['NOISE_DIM'], device=device)
-            if mode == "conditioning":
-                gen_notes, gen_latent = G(noise, encoder_latent)
-            else:
-                gen_notes, gen_latent = G(noise, None)
-            rf_logits_fake, emo_logits_on_fake, _ = D(gen_notes)
-            # adversarial loss: want D to say real
-            loss_G_adv = adversarial_loss(rf_logits_fake, torch.ones_like(rf_logits_fake, device=device))
-            # emotion loss: encourage ED to predict the target emotion for generated sample
-            loss_G_emo = emotion_loss(emo_logits_on_fake, emot_idx)
-            # optional recon loss: if you want generator output to be near AE recon, not used by default
-            loss_G = loss_G_adv + cfg.get('LAMBDA_EMOTION', 1.0) * loss_G_emo
-            loss_G.backward()
-            opt_G.step()
-
-            epoch_g_loss += loss_G.item()
-            epoch_d_loss += loss_D.item()
-
-        epoch_g_loss /= (batch_idx + 1)
-        epoch_d_loss /= (batch_idx + 1)
-        print(f"Epoch {epoch}/{cfg['EPOCHS']}  G_loss={epoch_g_loss:.6f}  D_loss={epoch_d_loss:.6f}")
-
-        # save sample outputs every SAVE_FREQ epochs
-        if epoch % cfg.get('SAVE_FREQ', 5) == 0:
-            G.eval()
             with torch.no_grad():
-                n_per_em = 2
-                for emo_idx in range(4):
-                    for i in range(n_per_em):
-                        z = torch.randn(1, cfg['NOISE_DIM'], device=device)
-                        if mode == "conditioning":
-                            if getattr(train_ds, 'latent_feats', None) is not None:
-                                # choose random latent (fallback random normal if not available)
-                                try:
-                                    rand_idx = np.random.randint(0, train_ds.latent_feats.shape[0])
-                                    latent_vec = torch.from_numpy(train_ds.latent_feats[rand_idx]).unsqueeze(0).to(device)
-                                except Exception:
-                                    latent_vec = torch.randn(1, cfg['LATENT_DIM'], device=device)
-                            else:
-                                latent_vec = torch.randn(1, cfg['LATENT_DIM'], device=device)
-                            gen_out, _ = G(z, latent_vec)
-                        else:
-                            gen_out, _ = G(z, None)
-                        out_np = gen_out.cpu().numpy()[0]
-                        sample_path = os.path.join(cfg['SAMPLE_DIR'], f"epoch{epoch}_emo{emo_idx}_s{i}.npy")
-                        np.save(sample_path, out_np)
-            G.train()
+                numeric_emb_d = E_num(numeric_batch)
+                noise = torch.randn(bsize, cfg['NOISE_DIM'], device=device)
+                gen_notes_d, _ = G(noise, encoder_latent, numeric_emb_d)
+            
+            # Real Score
+            d_real = D_discriminator(notes_real, numeric_emb_d)
+            
+            # Fake Score
+            d_fake = D_discriminator(gen_notes_d.detach(), numeric_emb_d)
+            
+            # Gradient Penalty
+            gp = compute_gradient_penalty(D_discriminator, notes_real.data, gen_notes_d.data, numeric_emb_d, device)
+            
+            # Loss: This is the line that failed before.
+            # d_fake and d_real are now tensors, so torch.mean will work.
+            loss_d = torch.mean(d_fake) - torch.mean(d_real) + (lambda_gp * gp)
+            
+            loss_d.backward()
+            opt_D.step()
+            ep_loss_d += loss_d.item()
 
-        # save checkpoints
+            
+            # ---------------------
+            #  Train Generator (G)
+            # ---------------------
+            if (batch_idx + 1) % critic_iters == 0:
+                opt_G.zero_grad()
+                
+                # Get fresh embeddings with gradients enabled
+                numeric_emb_g = E_num(numeric_batch)
+                
+                # We need fresh noise
+                noise_g = torch.randn(bsize, cfg['NOISE_DIM'], device=device)
+                
+                # --- THIS IS THE FIX ---
+                # Capture BOTH notes and the internal latent vector from the Generator
+                gen_notes_g, gen_latent_g = G(noise_g, encoder_latent, numeric_emb_g)
+                
+                # 1. Adversarial Loss (Fool the Discriminator)
+                d_fake_g = D_discriminator(gen_notes_g, numeric_emb_g)
+                loss_g_adv = -torch.mean(d_fake_g)
+                
+                # 2. Emotion Loss (Fool the ED)
+                # Check the ED's required input mode from its config
+                ed_input_mode = ed_cfg.get('input_mode', 'notes')
+                
+                if ed_input_mode == 'latent':
+                    # Pass the Generator's internal latent vector
+                    ed_input = gen_latent_g
+                else: # 'notes'
+                    # Pass the generated notes
+                    ed_input = gen_notes_g
+
+                # Get logits from the (frozen) Emotion Discriminator
+                ed_logits = D_emotion(ed_input)
+                
+                loss_g_emo_cls = criterion_emo(ed_logits, emot_idx)
+                
+                # Total G Loss
+                loss_g = loss_g_adv + (lambda_emotion * loss_g_emo_cls)
+                
+                loss_g.backward()
+                opt_G.step()
+                
+                ep_loss_g += loss_g_adv.item()
+                ep_loss_g_emo += loss_g_emo_cls.item()
+        # --- Epoch Logging ---
+        
+        steps = len(train_loader)
+        g_steps = max(1, steps // critic_iters)
+        
+        print(f"Epoch {epoch}/{cfg['EPOCHS']} | "
+              f"D_loss: {ep_loss_d/steps:.4f} | "
+              f"G_adv: {ep_loss_g/g_steps:.4f} | "
+              f"G_emo: {ep_loss_g_emo/g_steps:.4f}")
+              
+        writer.add_scalar("Loss/Critic", ep_loss_d/steps, epoch)
+        writer.add_scalar("Loss/Generator_Adv", ep_loss_g/g_steps, epoch)
+        writer.add_scalar("Loss/Generator_Emo", ep_loss_g_emo/g_steps, epoch)
+
+        # --- Checkpointing & Sampling (Omitted for brevity, same as before) ---
         if epoch % cfg.get('SAVE_FREQ', 5) == 0:
-            torch.save({'epoch': epoch, 'G': G.state_dict(), 'D': D.state_dict()}, os.path.join(cfg['CHECKPOINT_DIR'], f"gan_epoch{epoch}.pth"))
+            save_path = os.path.join(cfg['CHECKPOINT_DIR'], f"gan_epoch{epoch:04d}.pth")
+            torch.save({
+                'epoch': epoch,
+                'G': G.state_dict(),
+                'D': D_discriminator.state_dict(),
+                'E_num': E_num.state_dict(),
+                'opt_G': opt_G.state_dict(),
+                'opt_D': opt_D.state_dict()
+            }, save_path)
 
-    # final save
-    torch.save({'epoch': epoch, 'G': G.state_dict(), 'D': D.state_dict()}, os.path.join(cfg['CHECKPOINT_DIR'], f"gan_final.pth"))
-    print("Training complete.")
+    # Final Save
+    torch.save({
+        'G': G.state_dict(),
+        'E_num': E_num.state_dict()
+    }, os.path.join(cfg['CHECKPOINT_DIR'], "gan_final.pth"))
+    
+    writer.close()
+    print("Training Complete.")

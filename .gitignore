@@ -71,7 +71,9 @@ data/docs/*.png
 
 # --- Checkpoints / logs / run artifacts ---
 runs/
-checkpoints/
+experiments/gan/checkpoints/*
+!experiments/gan/checkpoints/gan_final.pth
+# experiments/gan/checkpoints/gan_final.pth
 wandb/
 tensorboard/
 *.ckpt
@@ -96,3 +98,6 @@ cam_test.py
 
 tree.txt
 haarcascade_frontalface_default.xml
+node_modules
+nothing.py
+temp_gen.py

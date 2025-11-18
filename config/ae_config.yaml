@@ -1,19 +1,21 @@
 # Autoencoder config for MELO-GAN
 MAX_NOTES: 512
-LATENT_DIM: 128
+LATENT_DIM: 8
 BATCH_SIZE: 32
-LR: 1e-4
-EPOCHS: 60
-WEIGHT_DECAY: 1e-5
-EARLY_STOP_PATIENCE: 10
+LR: 0.0001
+EPOCHS: 100 #60
+WEIGHT_DECAY: 0.00001
+KLD_WARMUP_EPOCHS: 1
+BETA: 10.0                 # <--- ADD THIS. This will multiply KLD loss by 5.
+EARLY_STOP_PATIENCE: 15
 
 # augmentation settings
-AUGMENT:
-  tempo_jitter: 0.07 # ±7% tempo scaling
-  pitch_shift: 1 # ±1 semitone
-  note_dropout: 0.03 # drop ~3% notes
-  velocity_jitter: 8.0 # velocity jitter (std dev)
-  timing_jitter: 0.02 # timing jitter in seconds (σ)
+AUGMENT:                  # <--- We are reducing all of these
+  tempo_jitter: 0.0      # (was 0.07)
+  pitch_shift: 0          # (was 1)
+  note_dropout: 0.0     # (was 0.03)
+  velocity_jitter: 0.0    # (was 8.0)
+  timing_jitter: 0.0     # (was 0.02)
 
 # directories
 PROCESSED_DIR: data/processed

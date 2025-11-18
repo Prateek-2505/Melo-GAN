@@ -62,12 +62,33 @@ class MIDIDataset(Dataset):
     def __len__(self):
         return len(self.files)
 
+# ... (inside your MIDIDataset class in src/ae/dataset.py) ...
+    
     def __getitem__(self, idx):
         path = self.files[idx]
         data = np.load(path, allow_pickle=True)
-        notes = data['notes'].astype(np.float32)  # (MAX_NOTES,4)
+        notes = data['notes'].astype(np.float32)  # (MAX_NOTES, 4)
+
+        # --- NEW: NORMALIZE THE DATA ---
+        # Create a mask to avoid scaling our -1 padding
+        mask = (notes[:, 0] != -1)
+
+        # 1. Scale Pitch (0-127) -> (-1, 1)
+        # We use 128.0 to get a range of [-1, 0.99]
+        notes[mask, 0] = (notes[mask, 0] / 128.0) * 2.0 - 1.0
         
-        # augmentations (probabilistic)
+        # 2. Scale Velocity (0-127) -> (-1, 1)
+        # Clip at 127 in case of bad data (like your 194.0)
+        notes[mask, 3] = np.clip(notes[mask, 3], 0, 127)
+        notes[mask, 3] = (notes[mask, 3] / 128.0) * 2.0 - 1.0
+
+        # 3. Scale Beats (Start & Duration)
+        #    We scale them to [0, 1] based on a large max.
+        notes[mask, 1] = notes[mask, 1] / self.cfg.get('MAX_START_BEAT', 100.0)
+        notes[mask, 2] = notes[mask, 2] / self.cfg.get('MAX_DURATION_BEAT', 20.0)
+        # --- End of Normalization ---
+        
+ # augmentations (probabilistic)
         if self.augment:
             if random.random() < 0.3 and self.tempo_jitter > 0:
                 scale = 1.0 + random.uniform(-self.tempo_jitter, self.tempo_jitter)
@@ -82,8 +103,7 @@ class MIDIDataset(Dataset):
             if random.random() < 0.2 and self.timing_jitter > 0:
                 notes = timing_jitter(notes, self.timing_jitter)
         
-        # Clip and sanitize
         notes = np.nan_to_num(notes, nan=0.0, posinf=0.0, neginf=0.0)
         notes = notes.astype(np.float32)
         
-        return notes, str(data.get('filename',''))  # filename for debugging/visualization
+        return notes, str(data.get('filename',''))

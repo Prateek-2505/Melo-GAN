@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MELO-GAN Interface</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .grid {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .card {
+            flex: 1;
+            min-width: 300px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 10px;
+            background: #fafafa;
+        }
+
+        .video-feed {
+            width: 100%;
+            border-radius: 10px;
+            border: 2px solid #333;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        button:disabled {
+            background: #ccc;
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 10px;
+        }
+
+        .emotion {
+            font-weight: bold;
+            color: #d9534f;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎵 MELO-GAN Generator</h1>
+
+        <div class="grid">
+            <div class="card">
+                <h3>📝 Text Analysis</h3>
+                <textarea id="textInput" rows="4"
+                    placeholder="How are you feeling? (e.g., 'I am so happy today!')"></textarea>
+                <button onclick="analyzeText()">Analyze Text</button>
+            </div>
+
+            <div class="card">
+                <h3>📷 Live Camera</h3>
+                <img src="{{ url_for('video_feed') }}" class="video-feed" alt="Camera Feed">
+                <button onclick="detectCameraEmotion()">Capture Emotion</button>
+            </div>
+        </div>
+
+        <div class="result-box" id="resultSection" style="display:none;">
+            <p>Detected Emotion: <span id="detectedEmotion" class="emotion">--</span></p>
+            <button id="genBtn" onclick="generateMusic()">Generate Music 🎶</button>
+            <p id="statusText" style="color: #666; font-size: 0.9em; margin-top: 10px;"></p>
+        </div>
+    </div>
+
+    <script>
+        let currentEmotion = null;
+
+        async function analyzeText() {
+            const text = document.getElementById('textInput').value;
+            if (!text) return alert("Please enter some text!");
+
+            const res = await fetch('/get_text_emotion', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: text })
+            });
+            const data = await res.json();
+            showResult(data.emotion);
+        }
+
+        async function detectCameraEmotion() {
+            const res = await fetch('/get_camera_emotion');
+            const data = await res.json();
+            showResult(data.emotion);
+        }
+
+        function showResult(emotion) {
+            currentEmotion = emotion;
+            document.getElementById('detectedEmotion').innerText = emotion.toUpperCase();
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('statusText').innerText = "Ready to generate.";
+        }
+
+        async function generateMusic() {
+            if (!currentEmotion) return;
+            const btn = document.getElementById('genBtn');
+            const status = document.getElementById('statusText');
+
+            btn.disabled = true;
+            status.innerText = "Generating music... (Please wait ~5s)";
+
+            try {
+                const res = await fetch('/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ emotion: currentEmotion })
+                });
+
+                if (!res.ok) throw new Error("Generation failed");
+
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `melo_${currentEmotion}.mid`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                status.innerText = "Download started! Check your downloads folder.";
+            } catch (e) {
+                status.innerText = "Error: " + e.message;
+            } finally {
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+
+</html>
