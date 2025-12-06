@@ -61,6 +61,9 @@ class GeneratorDecoder(nn.Module):
             nn.ReLU(True),
             nn.ConvTranspose1d(64, out_channels, kernel_size=5, stride=2, padding=2, output_padding=1), # (B, 4, reduced_len*8)
             # No final activation, output raw values
+            # --- CRITICAL CHANGE: Added Tanh Activation ---
+            # This forces the output to be in range [-1, 1]
+            nn.Tanh()
         )
 
     def forward(self, latent):

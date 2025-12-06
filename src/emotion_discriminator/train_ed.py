@@ -23,6 +23,8 @@ import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import json                     # <-- added import
+
 
 from .ed_model import EmotionDiscriminator
 from .ed_dataset import build_dataloader
@@ -126,6 +128,15 @@ def build_scheduler(optimizer, cfg):
 def main(cfg_path="config/ed_config.yaml"):
     cfg = load_yaml(cfg_path)
 
+    # history for plotting / external tools
+    history = {
+        "train_loss": [],
+        "val_loss": [],
+        "train_acc": [],
+        "val_acc": []
+    }
+    history_path = os.path.join("experiments/ed/logs", "ed_training_history.json")
+    
     # device
     device = torch.device(cfg.get("device", "cpu"))
 
@@ -137,7 +148,7 @@ def main(cfg_path="config/ed_config.yaml"):
     model = EmotionDiscriminator(cfg).to(device)
 
     # loss
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
 
     # optimizer & scheduler
     optimizer = build_optimizer(model, cfg)
@@ -166,6 +177,15 @@ def main(cfg_path="config/ed_config.yaml"):
         val_loss, val_acc = run_epoch(
             model, val_loader, criterion, optimizer, device, is_train=False
         )
+
+        # record history and persist it (safe, lightweight JSON)
+        history["train_loss"].append(float(train_loss))
+        history["val_loss"].append(float(val_loss))
+        history["train_acc"].append(float(train_acc))
+        history["val_acc"].append(float(val_acc))
+        os.makedirs(os.path.dirname(history_path), exist_ok=True)
+        with open(history_path, "w") as hf:
+            json.dump(history, hf, indent=2)
 
         # scheduler step
         if scheduler:

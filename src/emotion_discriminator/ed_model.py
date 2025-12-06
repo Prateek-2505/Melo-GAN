@@ -53,7 +53,13 @@ class NotesEncoder(nn.Module):
         in_ch = note_dim
         ch = 64
         for i in range(num_blocks):
-            layers.append(ConvBlock1D(in_ch, ch, kernel_size=5 if i == 0 else 3, padding=2 if i == 0 else 1, use_sn=use_sn))
+            '''
+            A stack of 4 Conv1D blocks. These convolution layers slide over the time axis of your music, learning local patterns (like arpeggios, chords, or fast rhythmic bursts).
+            '''
+            # Old: kernel_size=5 if i == 0 else 3
+            k_size = 11 if i == 0 else 3
+            pad = (k_size - 1) // 2
+            layers.append(ConvBlock1D(in_ch, ch, kernel_size=k_size, padding=pad, use_sn=use_sn))
             in_ch = ch
             ch = min(ch * 2, hidden_dim)
         self.conv = nn.Sequential(*layers)

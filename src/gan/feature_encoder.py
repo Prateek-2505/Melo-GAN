@@ -15,9 +15,9 @@ class FeatureEncoder(nn.Module):
         """
         super().__init__()
         layers = []
-        # --- FIX #2 ---
-        layers.append(nn.LayerNorm(in_dim)) # Use LayerNorm, it's more robust here
-        # --- END OF FIX ---
+        
+        layers.append(nn.LayerNorm(in_dim)) # Use LayerNorm,stabilizes stats per sample.    
+        
         prev = in_dim
         for h in hidden_dims:
             lin = nn.Linear(prev, h)

@@ -99,6 +99,12 @@ def save_piano_roll_to_midi(notes_array, output_path, fs=100, bpm=120.0, scale='
     2. Dynamic BPM
     3. Dynamic Instrument Selection
     """
+    '''
+    Randomizing
+    
+    '''
+    
+    
     bpm = max(60, min(bpm, 180))
     seconds_per_beat = 60.0 / bpm
 
@@ -114,7 +120,10 @@ def save_piano_roll_to_midi(notes_array, output_path, fs=100, bpm=120.0, scale='
     piano_inst = pretty_midi.Instrument(program=program)
 
     current_time_beats = 0.0
-    VELOCITY_THRESHOLD = -0.2 
+    VELOCITY_THRESHOLD = -0.5
+    # --- FIXED: Force Higher Register ---
+    # Default center is 63.5. GAN output mean ~ -0.2 -> Pitch 50.
+    # Shift +12 pushes it to ~62 (Middle C range).
 
     # Build Allowed Notes
     intervals = SCALES.get(scale, SCALES['chromatic'])
@@ -128,7 +137,11 @@ def save_piano_roll_to_midi(notes_array, output_path, fs=100, bpm=120.0, scale='
         return (octave * 12) + closest
 
     for note_info in notes_array:
-        norm_pitch, norm_velocity, norm_duration, norm_step = note_info
+        # Handle 5 channels (ignore the 5th channel for MIDI generation)
+        if len(note_info) >= 5:
+            norm_pitch, norm_velocity, norm_duration, norm_step = note_info[:4]
+        else:
+            norm_pitch, norm_velocity, norm_duration, norm_step = note_info
         
         step_beats = max(0.1, ((norm_step + 1.0) / 2.0) * MAX_BEAT_TIME)
         
@@ -136,8 +149,13 @@ def save_piano_roll_to_midi(notes_array, output_path, fs=100, bpm=120.0, scale='
             current_time_beats += step_beats
             continue 
 
-        pitch = int(((norm_pitch + 1.0) * 63.5))
-        pitch = np.clip(pitch, 36, 96) 
+        # --- Apply Shift ---
+        pitch = ((norm_pitch + 1.0) * 63.5)
+        pitch = int(pitch)
+        
+        
+        
+        pitch = np.clip(pitch, 48, 96) 
         pitch = snap_to_scale(pitch)
         
         vel_range = 1.0 - VELOCITY_THRESHOLD
