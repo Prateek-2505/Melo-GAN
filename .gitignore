@@ -29,10 +29,12 @@ Thumbs.db
 # Raw and processed MIDI/NPZ data (too big for git)
 data/raw/
 data/processed/
+data/models/ed/*
+!data/models/ed/ed_best.pth
 
 # --- Model outputs & checkpoints ---
 # Keep only directory structure, not large .pth files
-data/models/**/*.pth
+# data/models/**/*.pth
 !data/models/ae/
 !data/models/gan/
 !data/models/ae/ae_best.pth
@@ -101,3 +103,4 @@ haarcascade_frontalface_default.xml
 node_modules
 nothing.py
 temp_gen.py
+full_script.sh

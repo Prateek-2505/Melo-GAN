@@ -1,33 +1,32 @@
-import os
+# import os
 import yaml
 import torch
 import numpy as np
 import io
+import random # <--- ADDED for randomization
 from flask import Flask, render_template, request, jsonify, Response, send_file
 from flask_cors import CORS
+import os
 
 # --- IMPORT MODULES ---
 from textClassification.text import predict_emotion
-# We import the generator function and the variable from your camera module
 from camera.camera import generate_frames 
 import camera.camera as cam_module 
 
 # --- IMPORT GAN ---
 from src.gan.models import Generator
 from src.gan.feature_encoder import FeatureEncoder
-from src.gan.utils import save_piano_roll_to_midi
+from src.gan.utils import save_piano_roll_to_midi, NOTE_NAMES # NOTE_NAMES added for logging
 
 app = Flask(__name__, template_folder='web/templates', static_folder='web/static')
 CORS(app)
 
 # ==========================================
-# 1. LOAD GAN MODELS (This was missing!)
+# 1. LOAD GAN MODELS & CONFIGS
 # ==========================================
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 CONFIG_PATH = "config/gan_config.yaml"
 CHECKPOINT_PATH = "experiments/gan/checkpoints/gan_final.pth"
-
-print(f"[INIT] Loading GAN models on {DEVICE}...")
 
 # Load Config
 with open(CONFIG_PATH) as f:
@@ -46,9 +45,15 @@ if os.path.exists(CHECKPOINT_PATH):
     G.load_state_dict(ckpt['G'] if 'G' in ckpt else ckpt)
     E_num.load_state_dict(ckpt['E_num'])
     G.eval(); E_num.eval()
-    print("[INIT] GAN Models loaded successfully.")
-else:
-    print("[ERROR] GAN Checkpoint not found! Generation will fail.")
+
+# --- INSTRUMENT & MUSICAL LOGIC ---
+INSTRUMENTS = {
+    'happy': ['Acoustic Grand Piano', 'Bright Acoustic Piano', 'Electric Piano 1', 'Clavinet', 'Marimba', 'Steel Drums', 'Celesta'],
+    'sad': ['Acoustic Grand Piano', 'Electric Piano 2', 'Church Organ', 'Reed Organ', 'Acoustic Guitar (nylon)', 'Harp'],
+    'angry': ['Acoustic Grand Piano', 'Electric Guitar (clean)', 'Electric Guitar (muted)', 'Harpsichord', 'Orchestral Harp', 'Tango Accordion'],
+    'calm': ['Acoustic Grand Piano', 'Electric Piano 1', 'Vibraphone', 'Music Box', 'Acoustic Guitar (steel)', 'Glockenspiel']
+}
+COMMON_ROOTS = [0, 2, 4, 5, 7, 9, 10] # C, D, E, F, G, A, Bb
 
 def get_gan_features(emotion):
     """Maps emotion to GAN input features with jitter."""
@@ -64,13 +69,39 @@ def get_gan_features(emotion):
         return t + (torch.randn_like(t) * 0.15) # Add jitter
     return torch.randn(1, numeric_dim).to(DEVICE)
 
+def get_musical_params(emotion):
+    """Returns a random (Root Key, Scale, BPM, Instrument) based on emotion."""
+    emotion = emotion.lower()
+    root = random.choice(COMMON_ROOTS)
+    
+    possible_instruments = INSTRUMENTS.get(emotion, ['Acoustic Grand Piano'])
+    instrument = random.choice(possible_instruments)
+
+    if emotion == "happy":
+        scale = random.choice(['major', 'lydian', 'mixolydian', 'major_pentatonic'])
+        bpm = random.randint(120, 150)
+    elif emotion == "sad":
+        scale = random.choice(['minor', 'dorian', 'phrygian'])
+        bpm = random.randint(60, 85)
+    elif emotion == "angry":
+        scale = random.choice(['minor', 'minor_pentatonic', 'blues', 'locrian'])
+        bpm = random.randint(140, 170)
+    elif emotion == "calm":
+        scale = random.choice(['major_pentatonic', 'lydian', 'major'])
+        bpm = random.randint(70, 95)
+    else:
+        scale = 'major'
+        bpm = 120
+        instrument = 'Acoustic Grand Piano'
+        
+    return root, scale, bpm, instrument
+
 # ==========================================
 # 2. ROUTES
 # ==========================================
 
 @app.route('/')
 def index():
-    # This serves the index.html we just created
     return render_template('index.html')
 
 @app.route('/get_text_emotion', methods=['POST'])
@@ -81,12 +112,10 @@ def get_text_emotion():
 
 @app.route('/video_feed')
 def video_feed():
-    # Streams the camera frames to the <img> tag
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/get_camera_emotion')
 def get_camera_emotion():
-    # Fetches the variable from camera.py
     return jsonify({'emotion': cam_module.current_emotion})
 
 @app.route('/generate', methods=['POST'])
@@ -95,22 +124,29 @@ def generate_music():
     print(f"[API] Generating music for: {emotion}")
     
     with torch.no_grad():
-        # 1. Prepare inputs
         features = get_gan_features(emotion)
         emb = E_num(features)
         noise = torch.randn(1, cfg['NOISE_DIM']).to(DEVICE)
         latent = torch.zeros(1, cfg['LATENT_DIM']).to(DEVICE)
-        
-        # 2. Generate
         gen_notes, _ = G(noise, latent, emb)
         notes_cpu = gen_notes.cpu().numpy()[0]
     
-    # 3. Save to MIDI
-    scale = 'major' if emotion in ['happy', 'calm'] else 'minor'
-    bpm = 140 if emotion == 'happy' else 70 if emotion == 'sad' else 160 if emotion == 'angry' else 90
+    # Get DYNAMIC Musical Parameters (Key, Scale, BPM, Instrument)
+    root, scale, bpm, instrument = get_musical_params(emotion)
+    
+    print(f"[THEORY] {emotion.upper()} -> Key: {NOTE_NAMES[root]} | Scale: {scale} | Inst: {instrument}")
     
     midi_buffer = io.BytesIO()
-    save_piano_roll_to_midi(notes_cpu, "temp_gen.mid", bpm=bpm, scale_type=scale)
+    
+    # FIX: Pass all parameters correctly, using 'scale' and 'instrument_name'
+    save_piano_roll_to_midi(
+        notes_cpu, 
+        "temp_gen.mid", 
+        bpm=bpm, 
+        scale=scale, 
+        root_key=root, 
+        instrument_name=instrument # <--- FINAL PARAMETER FIX
+    )
     
     with open("temp_gen.mid", "rb") as f:
         midi_buffer.write(f.read())
@@ -120,9 +156,6 @@ def generate_music():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
-
-
-
 
 
 
