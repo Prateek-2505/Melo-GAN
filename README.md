@@ -243,15 +243,8 @@ It’s modular, scalable, and production-ready.
 
 ---
 
-# 🏁 10. Final Notes
-If you want:
-- A polished GitHub front-page badge layout
-- A CI/CD pipeline
-- Docker deployment
-- Auto-download models script
-- Architecture diagrams (PNG/SVG)
-
-Tell me — I’ll handle it.
-
-Let’s make this AI composer legendary. 🎵🔥
+# 🤝 10. Contributions
+- **K. PRATEEK REDDY**
+- **M. KAUSHIK CHANDRA**
+- **G. SHASHANK REDDY**
 
